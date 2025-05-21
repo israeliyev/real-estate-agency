@@ -1,0 +1,232 @@
+<div class="container-fluid">
+  <!-- Page Selector -->
+  <div class="row mb-4">
+    <div class="col">
+      <button
+        class="control-button"
+        nbButton
+        ghost
+        size="medium"
+        [status]="selectedPage === 'HOMEPAGE' ? 'primary' : 'basic'"
+        (click)="switchPage('HOMEPAGE')"
+      >
+        Ana Səhifə
+      </button>
+      <button
+        class="control-button"
+        nbButton
+        ghost
+        size="medium"
+        [status]="selectedPage === 'HOUSES' ? 'primary' : 'basic'"
+        (click)="switchPage('HOUSES')"
+      >
+        Evlər Səhifəsi
+      </button>
+    </div>
+  </div>
+
+  <!-- Add Section -->
+  <div class="row mb-4">
+    <div class="col-md-6 d-flex align-items-center">
+      <input
+        nbInput
+        fullWidth
+        placeholder="Yeni bölmə adı"
+        [(ngModel)]="newSectionName"
+        [maxlength]="maxSectionNameLength"
+        class="me-2"
+      />
+      <button
+        class="control-button"
+        nbButton
+        ghost
+        size="medium"
+        status="success"
+        (click)="addSection()"
+      >
+        Bölmə Əlavə Et
+      </button>
+    </div>
+  </div>
+
+  <!-- Sections List as Table -->
+  <div class="row" *ngIf="sections.length > 0">
+    <div class="col">
+      <nb-card *ngFor="let section of sections; let i = index" class="section-card">
+        <nb-card-header class="d-flex justify-content-between align-items-center">
+          <input
+            nbInput
+            fullWidth
+            [(ngModel)]="section.name"
+            [maxlength]="maxSectionNameLength"
+            (blur)="updateSection(section)"
+          />
+          <div>
+            <button
+              class="control-button"
+              nbButton
+              ghost
+              size="medium"
+              status="primary"
+              (click)="updateSection(section)"
+              class="me-2"
+            >
+              Yadda Saxla
+            </button>
+            <button
+              class="control-button"
+              nbButton
+              ghost
+              size="medium"
+              status="danger"
+              (click)="deleteSection(section.id)"
+            >
+              Sil
+            </button>
+          </div>
+        </nb-card-header>
+        <nb-card-body>
+          <table
+            nbTable
+            fullWidth
+            (click)="selectSection(section)"
+            [class.selected]="selectedSection?.id === section.id"
+            class="even-table"
+          >
+            <thead>
+            <tr>
+              <th>Ad</th>
+              <th>Bölgə</th>
+              <th>Qiymət</th>
+              <th>Qiymət Tipi</th>
+              <th>Əməliyyat</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let house of section.houses">
+              <td><a [href]="'pages/house/'+house.id" target="_blank">{{ house.name }}</a> </td>
+              <td>{{ house.location || 'Məlumat yoxdur' }}</td>
+              <td>{{ house.price }} AZN</td>
+              <td>{{ house.priceType | priceTypePipe}}</td>
+              <td>
+                <button
+                  class="control-button"
+                  nbButton
+                  ghost
+                  size="medium"
+                  status="danger"
+                  (click)="removeHouseFromSection(section, house.id)"
+                >
+                  Sil
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="section.houses.length === 0">
+              <td colspan="5" class="text-center">Bu bölmədə ev yoxdur</td>
+            </tr>
+            </tbody>
+          </table>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+
+  <!-- No Sections Message -->
+  <div *ngIf="sections.length === 0" class="row">
+    <div class="col">
+      <div status="info">
+        {{ selectedPage === 'HOMEPAGE' ? 'Ana Səhifə' : 'Evlər' }} üçün bölmə tapılmadı.
+      </div>
+    </div>
+  </div>
+
+  <!-- Houses List -->
+  <div class="row mt-4">
+    <div class="col">
+      <nb-card class="house-list-card">
+        <nb-card-header>Evlər</nb-card-header>
+        <nb-card-body>
+          <div *ngIf="loading" class="text-center">
+            <i icon="loader-outline" status="primary" class="spin"></i>
+          </div>
+          <div *ngIf="!loading && houses.length === 0" class="text-center">
+            <div status="info">Ev tapılmadı</div>
+          </div>
+          <table nbTable fullWidth *ngIf="!loading && houses.length > 0" class="even-table">
+            <thead>
+            <tr>
+              <th>Ad</th>
+              <th>Bölgə</th>
+              <th>Qiymət</th>
+              <th>Qiymət Tipi</th>
+              <th>Əməliyyat</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let house of houses">
+              <td><a [href]="'pages/house/'+house.id" target="_blank">{{ house.name }}</a> </td>
+              <td>{{ house.location || 'Məlumat yoxdur' }}</td>
+              <td>{{ house.price }} AZN</td>
+              <td>{{ house.priceType | priceTypePipe}}</td>
+              <td>
+                <button
+                  class="control-button"
+                  nbButton
+                  ghost
+                  size="medium"
+                  [status]="selectedSection && isHouseInSection(selectedSection, house.id) ? 'basic' : 'success'"
+                  (click)="addHouseToSection(house.id)"
+                  [disabled]="!selectedSection || isHouseInSection(selectedSection, house.id)"
+                >
+                  {{ selectedSection && isHouseInSection(selectedSection, house.id) ? 'Əlavə Edilib' : 'Əlavə Et' }}
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <!-- Pagination -->
+          <div *ngIf="totalPages > 1 && !loading" class="d-flex justify-content-center mt-3 pagination-container">
+            <button
+              class="control-button"
+              nbButton
+              ghost
+              size="medium"
+              status="basic"
+              (click)="changePage(pageNumber - 1)"
+              [disabled]="pageNumber === 1"
+              class="me-2"
+            >
+              Geri
+            </button>
+            <button
+              class="control-button"
+              nbButton
+              ghost
+              size="medium"
+              *ngFor="let page of getPageRange()"
+              [status]="page === pageNumber ? 'primary' : 'basic'"
+              (click)="onPageClick(page)"
+              [disabled]="page === '...'"
+              class="mx-1"
+            >
+              {{ page }}
+            </button>
+            <button
+              class="control-button"
+              nbButton
+              ghost
+              size="medium"
+              status="basic"
+              (click)="changePage(pageNumber + 1)"
+              [disabled]="pageNumber === totalPages"
+              class="ms-2"
+            >
+              İrəli
+            </button>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+</div>

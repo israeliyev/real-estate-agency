@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-12">
+    <nb-card>
+      <nb-card-header>
+        İstifadəçilər tərəfindən baxılan evlər və baxış sayı
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row show-grid" *ngIf="houses && houses.length > 0">
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let house of houses">
+            <div class="card h-100" (click)="openHouseDetail(house.houseId)">
+              <img [src]="house.coverImage || 'assets/images/no-image.png'" class="card-img-top" alt="..." />
+              <div class="card-body position-relative">
+                <h6 class="card-title">{{house?.price}} {{house?.priceType}}</h6>
+                <p class="card-text">{{house?.name}}</p>
+                <span class="card-text">{{house?.location}}</span>
+                <p class="card-text mt-2">{{opTitle}}: {{house?.viewedCount}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pager-container w-100 d-flex justify-content-center align-items-center mt-4" *ngIf="housesPage?.totalPages > 1">
+        <nav aria-label="Page navigation example ">
+          <ul class="pagination">
+            <li class="page-item previous-page" (click)="goToPreviousPage()"><a [ngClass]="{'disabled': housesPage.first}" class="page-link disabled">Geri</a></li>
+
+            <li class="page-item" *ngFor="let pn of totalPagesArray">
+              <a class="page-link" (click)="goToPage(pn)">{{ pn + 1 }}</a>
+            </li>
+
+            <li class="page-item next-page" (click)="goToNextPage()"><a [ngClass]="{'disabled': housesPage.last}" class="page-link disabled">İrəli</a></li>
+          </ul>
+        </nav>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

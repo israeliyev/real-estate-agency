@@ -1,0 +1,400 @@
+<!-- house-list.component.html -->
+<div class="notes-container">
+  <div class="search d-lg-flex align-items-center">
+    <input (input)="searchProducts($event)" placeholder="Məhsul adı, kodu, sahib adı, sahib nömrəsi ilə axtar..."
+           type="text">
+    <i class="bi bi-search text-white"></i>
+  </div>
+  <div class="filter d-flex justify-content-between align-items-center">
+    <div class="parameters d-flex flex-wrap py-3 gap-2">
+      <!-- Main Category Dropdown -->
+      <div *ngIf="mainCategories.length > 0" class="item mt-1">
+        <div class="dropdown select-parameter">
+          <button
+            aria-expanded="false"
+            class="btn bg-white text-black rounded-pill"
+            data-bs-toggle="dropdown"
+            type="button"
+          >
+            <span>{{ selectedMainCategory?.name || 'Kategoriya' }}</span>
+
+            <i
+              *ngIf="!selectedMainCategory"
+              class="bi bi-chevron-down ms-2"
+            ></i>
+            <i
+              (click)="selectedMainCategory = undefined; selectedSubCategory = undefined; parameters = []; selectiveParameterValues.clear(); inputParameterRanges.clear(); this.fetchFilteredHouses()"
+              *ngIf="selectedMainCategory"
+              class="bi bi-x-lg ms-2"
+            ></i>
+
+          </button>
+          <ul class="dropdown-menu">
+            <li (click)="selectMainCategory(mc)" *ngFor="let mc of mainCategories">
+              <a class="dropdown-item">{{ mc.name }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sub Category Dropdown -->
+      <div *ngIf="subCategories.length > 0" class="item mt-1">
+        <div class="dropdown select-parameter">
+          <button
+            aria-expanded="false"
+            class="btn bg-white text-black rounded-pill"
+            data-bs-toggle="dropdown"
+            type="button"
+          >
+            <span>{{ selectedSubCategory?.name || 'Alt Kategoriya' }}</span>
+
+            <i
+              *ngIf="!selectedSubCategory"
+              class="bi bi-chevron-down ms-2"
+            ></i>
+            <i
+              (click)="selectedSubCategory = undefined; parameters = []; selectiveParameterValues.clear(); inputParameterRanges.clear(); this.fetchFilteredHouses()"
+              *ngIf="selectedSubCategory"
+              class="bi bi-x-lg ms-2"
+            ></i>
+
+          </button>
+          <ul class="dropdown-menu">
+            <li (click)="selectSubCategory(sc)" *ngFor="let sc of subCategories">
+              <a class="dropdown-item">{{ sc.name }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Price Parameter (Input Range) -->
+      <div *ngIf="priceParameter" class="item mt-1">
+        <div class="dropdown input-parameter">
+          <button
+            aria-expanded="false"
+            class="btn bg-white text-black rounded-pill"
+            data-bs-toggle="dropdown"
+            type="button"
+          >
+              <span>
+                {{
+                  inputParameterRanges.has(priceParameter.id)
+                    ? (inputParameterRanges.get(priceParameter.id)?.min || 0) + ' - ' + (inputParameterRanges.get(priceParameter.id)?.max || 0)
+                    : priceParameter.name
+                }}
+              </span>
+            <i
+              *ngIf="!inputParameterRanges.has(priceParameter.id)"
+              class="bi bi-chevron-down ms-2"
+            ></i>
+            <i
+              (click)="inputParameterRanges.delete(priceParameter.id); this.fetchFilteredHouses()"
+              *ngIf="inputParameterRanges.has(priceParameter.id)"
+              class="bi bi-x-lg ms-2"
+            ></i>
+          </button>
+          <ul class="dropdown-menu px-2">
+            <li class="d-flex align-items-center gap-2">
+              <input
+                (input)="onMinChange(priceParameter.id, $event)"
+                [value]="inputParameterRanges.get(priceParameter.id)?.min || ''"
+                min="0"
+                placeholder="min."
+                type="number"
+              />
+              <span>-</span>
+              <input
+                (input)="onMaxChange(priceParameter.id, $event)"
+                [value]="inputParameterRanges.get(priceParameter.id)?.max || ''"
+                min="0"
+                placeholder="max."
+                type="number"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Location Parameter (Selective) -->
+      <div *ngIf="locationParameter" class="item mt-1">
+        <div class="dropdown select-parameter">
+          <button
+            aria-expanded="false"
+            class="btn bg-white text-black rounded-pill"
+            data-bs-toggle="dropdown"
+            type="button"
+          >
+              <span>{{
+                  selectiveParameterValues.has(locationParameter.id)
+                    ? selectiveParameterValues.get(locationParameter.id)?.valueName
+                    : locationParameter.name
+                }}</span>
+            <i
+              *ngIf="!selectiveParameterValues.has(locationParameter.id)"
+              class="bi bi-chevron-down ms-2"
+            ></i>
+            <i
+              (click)="selectiveParameterValues.delete(locationParameter.id); this.fetchFilteredHouses()"
+              *ngIf="selectiveParameterValues.has(locationParameter.id)"
+              class="bi bi-x-lg ms-2"
+            ></i></button>
+          <ul class="dropdown-menu">
+            <li
+              (click)="onSelectParameterChange(locationParameter.id, sp.id, sp.name)"
+              *ngFor="let sp of locationParameter.selectiveParameterValues"
+            >
+              <a class="dropdown-item">{{ sp.name }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Dynamic Parameters -->
+      <ng-container *ngFor="let parameter of parameters">
+        <!-- Input Parameters -->
+        <div
+          *ngIf="parameter.inputParameterValues && parameter.inputParameterValues.length > 0"
+          class="item mt-1"
+        >
+          <div class="dropdown input-parameter">
+            <button
+              aria-expanded="false"
+              class="btn bg-white text-black rounded-pill"
+              data-bs-toggle="dropdown"
+              type="button"
+            >
+                <span>
+                  {{
+                    inputParameterRanges.has(parameter.id)
+                      ? (inputParameterRanges.get(parameter.id)?.min || 0) + ' - ' + (inputParameterRanges.get(parameter.id)?.max || 0)
+                      : parameter.name
+                  }}
+                </span>
+              <i
+                *ngIf="!inputParameterRanges.has(parameter.id)"
+                class="bi bi-chevron-down ms-2"
+              ></i>
+              <i
+                (click)="inputParameterRanges.delete(parameter.id); this.fetchFilteredHouses()"
+                *ngIf="inputParameterRanges.has(parameter.id)"
+                class="bi bi-x-lg ms-2"
+              ></i>
+            </button>
+            <ul class="dropdown-menu px-2">
+              <li class="d-flex align-items-center gap-2">
+                <input
+                  (input)="onMinChange(parameter.id, $event)"
+                  [value]="inputParameterRanges.get(parameter.id)?.min || ''"
+                  min="0"
+                  placeholder="min."
+                  type="number"
+                />
+                <span>-</span>
+                <input
+                  (input)="onMaxChange(parameter.id, $event)"
+                  [value]="inputParameterRanges.get(parameter.id)?.max || ''"
+                  min="0"
+                  placeholder="max."
+                  type="number"
+                />
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Selective Parameters -->
+        <div
+          *ngIf="parameter.selectiveParameterValues && parameter.selectiveParameterValues.length > 0"
+          class="item mt-1"
+        >
+          <div class="dropdown select-parameter">
+            <button
+              aria-expanded="false"
+              class="btn bg-white text-black rounded-pill"
+              data-bs-toggle="dropdown"
+              type="button"
+            >
+                <span>{{
+                    selectiveParameterValues.has(parameter.id)
+                      ? selectiveParameterValues.get(parameter.id)?.valueName
+                      : parameter.name
+                  }}</span>
+
+              <i
+                *ngIf="!selectiveParameterValues.has(parameter.id)"
+                class="bi bi-chevron-down ms-2"
+              ></i>
+              <i
+                (click)="selectiveParameterValues.delete(parameter.id); this.fetchFilteredHouses()"
+                *ngIf="selectiveParameterValues.has(parameter.id)"
+                class="bi bi-x-lg ms-2"
+              ></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li
+                (click)="onSelectParameterChange(parameter.id, sp.id, sp.name)"
+                *ngFor="let sp of parameter.selectiveParameterValues"
+              >
+                <a class="dropdown-item">{{ sp.name }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Reset Filters Button -->
+      <div *ngIf="parameters && parameters.length > 0" class="item mt-1">
+        <button (click)="resetFilters()" class="btn bg-white text-black rounded-pill">
+          <span>Filtri Sıfırla</span>
+        </button>
+      </div>
+
+      <div class="sorting">
+        <div class="item mt-1">
+          <div class="dropdown">
+            <button
+              aria-expanded="false"
+              class="btn bg-white text-black rounded-pill"
+              data-bs-toggle="dropdown"
+              type="button"
+            >
+              <span>{{ sortName }}</span>
+              <i class="bi bi-chevron-down ms-2"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a (click)="setOrderType(OrderEnum.LAST)" class="dropdown-item">Ən son</a></li>
+              <li><a (click)="setOrderType(OrderEnum.OLD)" class="dropdown-item">Ən əvvəl</a></li>
+              <li><a (click)="setOrderType(OrderEnum.EXPENSIVE)" class="dropdown-item">Əvvəlcə Bahalı</a></li>
+              <li><a (click)="setOrderType(OrderEnum.CHEAP)" class="dropdown-item">Əvvəlcə Ucuz</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="house-list-container">
+    <table class="house-table">
+      <thead>
+      <tr>
+        <th>Əməliyyatlar</th>
+        <th class="w100">Kod</th>
+        <th class="w200">Status</th>
+        <th class="w200">Sahib Adı</th>
+        <th class="w200">Sahib Nömrəsi</th>
+        <th class="w300">Qeydlər</th>
+        <th>Ad</th>
+        <th>Qiymət</th>
+        <th>Qiymət Tipi</th>
+        <th>Yer</th>
+        <th>Əsas Kateqoriya</th>
+        <th>Alt Kateqoriya</th>
+        <th class="w200">Parametrlər</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let house of houses">
+        <td>
+          <ng-container *ngIf="editingHouseId === house.id; else showEditButton">
+            <div class="d-flex">
+              <button class="save-btn me-2" (click)="saveEdit()">Yadda saxla</button>
+              <button class="cancel-btn" (click)="cancelEdit()">Ləğv et</button>
+            </div>
+          </ng-container>
+          <ng-template #showEditButton>
+            <button class="edit-btn" (click)="startEdit(house)">Redaktə et</button>
+            <button class="go-btn mt-2" (click)="openHouseDetail(house.id)">Evə get</button>
+          </ng-template>
+        </td>
+        <td>{{ house.code || '-' }}</td>
+        <td>
+          <ng-container *ngIf="editingHouseId === house.id; else displayStatus">
+            <select [(ngModel)]="editedHouse!.status">
+              <option [value]="true">Müştəriyə verilib</option>
+              <option [value]="false">Boş</option>
+            </select>
+          </ng-container>
+          <ng-template #displayStatus>
+            {{ house.status ? 'Müştəriyə verilib' : 'Boş' }}
+          </ng-template>
+        </td>
+
+        <td>
+          <ng-container *ngIf="editingHouseId === house.id; else displayOwnerName">
+            <input type="text" [(ngModel)]="editedHouse!.ownerName" placeholder="Sahib Adı"/>
+          </ng-container>
+          <ng-template #displayOwnerName>{{ house.ownerName || '-' }}</ng-template>
+        </td>
+
+        <td>
+          <ng-container *ngIf="editingHouseId === house.id; else displayOwnerNumber">
+            <input type="text" [(ngModel)]="editedHouse!.ownerNumber" placeholder="Sahib Nömrəsi"/>
+          </ng-container>
+          <ng-template #displayOwnerNumber>{{ house.ownerNumber || '-' }}</ng-template>
+        </td>
+
+        <td>
+          <ng-container *ngIf="editingHouseId === house.id; else displayNotes">
+            <textarea [(ngModel)]="editedHouse!.notes"></textarea>
+          </ng-container>
+          <ng-template #displayNotes>{{ house.notes || '-' }}</ng-template>
+        </td>
+
+        <td>{{ house.name || '-' }}</td>
+        <td>{{ house.price || '-' }}</td>
+        <td>{{ getPriceTypeLabel(house.priceType) }}</td>
+        <td>{{ house.location || '-' }}</td>
+        <td>{{ house.mainCategory?.name || '-' }}</td>
+        <td>{{ house.subCategory?.name || '-' }}</td>
+        <td class="w200">
+          <div class="parameters-box">
+            {{ getParameterDisplay(house) || '-' }}
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="totalPages > 1 && !loading" class="pagination d-flex justify-content-center align-items-center mt-4">
+    <ul class="pagination">
+      <!-- Previous Button -->
+      <li class="page-item" [class.disabled]="pageNumber === 1">
+        <button class="page-link" (click)="changePage(pageNumber - 1)" [disabled]="pageNumber === 1">
+          <span aria-hidden="true">&laquo;</span>
+        </button>
+      </li>
+
+      <!-- Page Numbers -->
+      <li class="page-item" *ngFor="let page of getPageRange(); trackBy: trackByFn"
+          [class.active]="page === pageNumber"
+          [class.disabled]="page === '...'">
+        <button class="page-link" (click)="onPageClick(page)" [disabled]="page === '...'">
+          {{ page }}
+        </button>
+      </li>
+
+      <!-- Next Button -->
+      <li class="page-item" [class.disabled]="pageNumber === totalPages">
+        <button class="page-link" (click)="changePage(pageNumber + 1)" [disabled]="pageNumber === totalPages">
+          <span aria-hidden="true">&raquo;</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- No Houses Found -->
+  <div *ngIf="houses.length === 0 && !loading" class="not-found-container container-xxl mt-5">
+    <div class="not-found-icon">🏠</div>
+    <h2 class="not-found-title">Ev Tapılmadı</h2>
+    <p class="not-found-message">
+      Axtarışınıza uyğun elanda ev tapılmadı
+    </p>
+  </div>
+
+  <div *ngIf="houses.length === 0 && loading"
+       class="loading-container w-100 d-flex justify-content-center align-items-center">
+    <div class="spinner-border text-primary" role="status">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="header-container">
+  <div class="logo-container">
+    <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
+      <nb-icon icon="menu-2-outline"></nb-icon>
+    </a>
+    <a class="logo" href="#" (click)="navigateHome()">İdarəetmə-<span>Paneli</span></a>
+  </div>
+  <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
+    <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
+  </nb-select>
+</div>
+
+<div *ngIf="diskSpace">
+  <div class="header-container space-info">
+    <div class="space-labels">
+      <div>{{ formatBytes(diskSpace.usedSpace) }}</div>
+    </div>
+    <nb-progress-bar
+      class="w-100"
+      [value]="usedSpacePercentage"
+      [status]="getStatus(usedSpacePercentage)"
+      [displayValue]="true"
+    ></nb-progress-bar>
+    <div class="space-labels text-right">
+      <div>{{ formatBytes(diskSpace.totalSpace) }}</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="header-container">
+  <nb-actions size="small">
+    <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
+      <nb-user [nbContextMenu]="null"
+               [nbContextMenuTag]="'user-context-menu'"
+               [onlyPicture]="userPictureOnly"
+               [name]="'Mingəçevir Əmlak Agentliyi'"
+               [picture]="'assets/images/logo.png'">
+      </nb-user>
+    </nb-action>
+  </nb-actions>
+</div>
