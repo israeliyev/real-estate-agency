@@ -1,0 +1,359 @@
+<div class="houses-container mb-4">
+  <div class="container-xxl">
+    <div class="filter d-flex justify-content-between align-items-center">
+      <div class="parameters d-flex flex-wrap py-3 gap-2">
+        <!-- Main Category Dropdown -->
+        <div *ngIf="mainCategories.length > 0" class="item mt-1">
+          <div class="dropdown select-parameter">
+            <button
+              aria-expanded="false"
+              class="btn bg-white text-black rounded-pill"
+              data-bs-toggle="dropdown"
+              type="button"
+            >
+              <span>{{ selectedMainCategory?.name || 'Kateqoriya' | capitalizeFirst }}</span>
+
+              <i
+                *ngIf="!selectedMainCategory"
+                class="bi bi-chevron-down ms-2"
+              ></i>
+              <i
+                (click)="selectedMainCategory = undefined;
+                selectedSubCategory = undefined;
+                subCategories = [];
+                getStandardSubCategories();
+                parameters = [];
+                selectiveParameterValues.clear();
+                inputParameterRanges.clear();
+                this.fetchFilteredHouses()"
+                *ngIf="selectedMainCategory"
+                class="bi bi-x-lg ms-2"
+              ></i>
+
+            </button>
+            <ul class="dropdown-menu">
+              <li (click)="selectMainCategory(mc)" *ngFor="let mc of mainCategories">
+                <a class="dropdown-item">{{ mc.name | capitalizeFirst }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Sub Category Dropdown -->
+        <div *ngIf="subCategories.length > 0" class="item mt-1">
+          <div class="dropdown select-parameter">
+            <button
+              aria-expanded="false"
+              class="btn bg-white text-black rounded-pill"
+              data-bs-toggle="dropdown"
+              type="button"
+            >
+              <span>{{ selectedSubCategory?.name || 'Əmlak Növü' | capitalizeFirst }}</span>
+
+              <i
+                *ngIf="!selectedSubCategory"
+                class="bi bi-chevron-down ms-2"
+              ></i>
+              <i
+                (click)="selectedSubCategory = undefined;
+                parameters = [];
+                selectiveParameterValues.clear();
+                inputParameterRanges.clear();
+                this.fetchFilteredHouses()"
+                *ngIf="selectedSubCategory"
+                class="bi bi-x-lg ms-2"
+              ></i>
+
+            </button>
+            <ul class="dropdown-menu">
+              <li (click)="selectSubCategory(sc)" *ngFor="let sc of subCategories">
+                <a class="dropdown-item">{{ sc.name | capitalizeFirst }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Price Parameter (Input Range) -->
+        <div *ngIf="priceParameter" class="item mt-1">
+          <div class="dropdown input-parameter">
+            <button
+              aria-expanded="false"
+              class="btn bg-white text-black rounded-pill"
+              data-bs-toggle="dropdown"
+              type="button"
+            >
+              <span>
+                {{
+                  inputParameterRanges.has(priceParameter.id)
+                    ? (inputParameterRanges.get(priceParameter.id)?.min || 0) + ' - ' + (inputParameterRanges.get(priceParameter.id)?.max || 0)
+                    : priceParameter.name  | capitalizeFirst
+                }}
+              </span>
+              <i
+                *ngIf="!inputParameterRanges.has(priceParameter.id)"
+                class="bi bi-chevron-down ms-2"
+              ></i>
+              <i
+                (click)="inputParameterRanges.delete(priceParameter.id); this.fetchFilteredHouses()"
+                *ngIf="inputParameterRanges.has(priceParameter.id)"
+                class="bi bi-x-lg ms-2"
+              ></i>
+            </button>
+            <ul class="dropdown-menu px-2">
+              <li class="d-flex align-items-center gap-2">
+                <input
+                  (input)="onMinChange(priceParameter.id, $event)"
+                  [value]="inputParameterRanges.get(priceParameter.id)?.min || ''"
+                  min="0"
+                  placeholder="min."
+                  type="number"
+                />
+                <span>-</span>
+                <input
+                  (input)="onMaxChange(priceParameter.id, $event)"
+                  [value]="inputParameterRanges.get(priceParameter.id)?.max || ''"
+                  min="0"
+                  placeholder="max."
+                  type="number"
+                />
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Location Parameter (Selective) -->
+        <div *ngIf="locationParameter" class="item mt-1">
+          <div class="dropdown select-parameter">
+            <button
+              aria-expanded="false"
+              class="btn bg-white text-black rounded-pill"
+              data-bs-toggle="dropdown"
+              type="button"
+            >
+              <span>{{
+                  selectiveParameterValues.has(locationParameter.id)
+                    ? selectiveParameterValues.get(locationParameter.id)?.valueName
+                    : locationParameter.name | capitalizeFirst
+                }}</span>
+              <i
+                *ngIf="!selectiveParameterValues.has(locationParameter.id)"
+                class="bi bi-chevron-down ms-2"
+              ></i>
+              <i
+                (click)="selectiveParameterValues.delete(locationParameter.id); this.fetchFilteredHouses()"
+                *ngIf="selectiveParameterValues.has(locationParameter.id)"
+                class="bi bi-x-lg ms-2"
+              ></i></button>
+            <ul class="dropdown-menu">
+              <li
+                (click)="onSelectParameterChange(locationParameter.id, sp.id, sp.name)"
+                *ngFor="let sp of locationParameter.selectiveParameterValues"
+              >
+                <a class="dropdown-item">{{ sp.name | capitalizeFirst }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dynamic Parameters -->
+        <ng-container *ngFor="let parameter of parameters">
+          <!-- Input Parameters -->
+          <div
+            *ngIf="parameter.type === ParameterTypeEnum.INPUT"
+            class="item mt-1"
+          >
+            <div class="dropdown input-parameter">
+              <button
+                aria-expanded="false"
+                class="btn bg-white text-black rounded-pill"
+                data-bs-toggle="dropdown"
+                type="button"
+              >
+                <span>
+                  {{
+                    inputParameterRanges.has(parameter.id)
+                      ? (inputParameterRanges.get(parameter.id)?.min || 0) + ' - ' + (inputParameterRanges.get(parameter.id)?.max || 0)
+                      : parameter.name | capitalizeFirst
+                  }}
+                </span>
+                <i
+                  *ngIf="!inputParameterRanges.has(parameter.id)"
+                  class="bi bi-chevron-down ms-2"
+                ></i>
+                <i
+                  (click)="inputParameterRanges.delete(parameter.id); this.fetchFilteredHouses()"
+                  *ngIf="inputParameterRanges.has(parameter.id)"
+                  class="bi bi-x-lg ms-2"
+                ></i>
+              </button>
+              <ul class="dropdown-menu px-2">
+                <li class="d-flex align-items-center gap-2">
+                  <input
+                    (input)="onMinChange(parameter.id, $event)"
+                    [value]="inputParameterRanges.get(parameter.id)?.min || ''"
+                    min="0"
+                    placeholder="min."
+                    type="number"
+                  />
+                  <span>-</span>
+                  <input
+                    (input)="onMaxChange(parameter.id, $event)"
+                    [value]="inputParameterRanges.get(parameter.id)?.max || ''"
+                    min="0"
+                    placeholder="max."
+                    type="number"
+                  />
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Selective Parameters -->
+          <div
+            *ngIf="parameter.type === ParameterTypeEnum.SELECT"
+            class="item mt-1"
+          >
+            <div class="dropdown select-parameter">
+              <button
+                aria-expanded="false"
+                class="btn bg-white text-black rounded-pill"
+                data-bs-toggle="dropdown"
+                type="button"
+              >
+                <span>{{
+                    selectiveParameterValues.has(parameter.id)
+                      ? selectiveParameterValues.get(parameter.id)?.valueName
+                      : parameter.name | capitalizeFirst
+                  }}</span>
+
+                <i
+                  *ngIf="!selectiveParameterValues.has(parameter.id)"
+                  class="bi bi-chevron-down ms-2"
+                ></i>
+                <i
+                  (click)="selectiveParameterValues.delete(parameter.id); this.fetchFilteredHouses()"
+                  *ngIf="selectiveParameterValues.has(parameter.id)"
+                  class="bi bi-x-lg ms-2"
+                ></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li
+                  (click)="onSelectParameterChange(parameter.id, sp.id, sp.name)"
+                  *ngFor="let sp of parameter.selectiveParameterValues"
+                >
+                  <a class="dropdown-item">{{ sp.name }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Reset Filters Button -->
+        <div *ngIf="parameters && parameters.length > 0" class="item mt-1">
+          <button (click)="resetFilters()" class="btn bg-white text-black rounded-pill">
+            <span>Filteri Sıfırla</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sections -->
+    <ng-container *ngIf="sections.length > 0">
+      <div *ngFor="let section of sections" class="house-section mt-4">
+        <ng-container *ngIf="section.houses && section.houses.length > 0">
+          <div class="title">
+            <h2 class="text-capitalize">{{ section.name }}</h2>
+          </div>
+          <div class="houses">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3 row-cols-lg-5 gy-3 w-100">
+              <div *ngFor="let house of section.houses">
+                <app-house-card [house]="house"></app-house-card>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <!-- Houses List -->
+    <div *ngIf="houses && !loading && houses.length > 0" class="house-section mt-4">
+      <div class="title d-flex justify-content-between">
+        <h2 class="text-capitalize">Elanlar</h2>
+
+        <div class="sorting">
+          <div class="item mt-1">
+            <div class="dropdown">
+              <button
+                aria-expanded="false"
+                class="btn bg-white text-black rounded-pill"
+                data-bs-toggle="dropdown"
+                type="button"
+              >
+                <span>{{ sortName }}</span>
+                <i class="bi bi-chevron-down ms-2"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a (click)="setOrderType(OrderEnum.LAST)" class="dropdown-item">Ən son</a></li>
+                <li><a (click)="setOrderType(OrderEnum.OLD)" class="dropdown-item">Ən əvvəl</a></li>
+                <li><a (click)="setOrderType(OrderEnum.EXPENSIVE)" class="dropdown-item">Əvvəlcə Bahalı</a></li>
+                <li><a (click)="setOrderType(OrderEnum.CHEAP)" class="dropdown-item">Əvvəlcə Ucuz</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="houses">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3 row-cols-lg-5 gy-3 w-100">
+          <div *ngFor="let house of houses">
+            <app-house-card [house]="house"></app-house-card>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div *ngIf="totalPages > 1 && !loading" class="pagination d-flex justify-content-center align-items-center mt-4">
+      <ul class="pagination">
+        <!-- Previous Button -->
+        <li [class.disabled]="pageNumber === 1" class="page-item">
+          <button (click)="changePage(pageNumber - 1)" [disabled]="pageNumber === 1" class="page-link">
+            <span aria-hidden="true">&laquo;</span>
+          </button>
+        </li>
+
+        <!-- Page Numbers -->
+        <li *ngFor="let page of getPageRange(); trackBy: trackByFn" [class.active]="page === pageNumber"
+            [class.disabled]="page === '...'"
+            class="page-item">
+          <button (click)="onPageClick(page)" [disabled]="page === '...'" class="page-link">
+            {{ page }}
+          </button>
+        </li>
+
+        <!-- Next Button -->
+        <li [class.disabled]="pageNumber === totalPages" class="page-item">
+          <button (click)="changePage(pageNumber + 1)" [disabled]="pageNumber === totalPages" class="page-link">
+            <span aria-hidden="true">&raquo;</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- No Houses Found -->
+    <div *ngIf="houses.length === 0 && !loading" class="not-found-container container-xxl mt-5">
+      <div class="not-found-icon">🏠</div>
+      <h2 class="not-found-title">Əmlak Tapılmadı</h2>
+      <p class="not-found-message">
+        Üzr istəyirik, axtarışınıza uyğun ev tapa bilmədik.
+        Filtrlərinizi dəyişdirməyə cəhd edin və ya yeni elanlar üçün daha sonra yenidən yoxlayın!
+      </p>
+      <a class="back-button" href="/ana-sehife">Geri Dön</a>
+    </div>
+
+    <div *ngIf="houses.length === 0 && loading"
+         class="loading-container w-100 d-flex justify-content-center align-items-center">
+      <div class="spinner-border text-primary" role="status">
+      </div>
+    </div>
+  </div>
+</div>

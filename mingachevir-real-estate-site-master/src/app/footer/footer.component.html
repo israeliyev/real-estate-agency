@@ -1,0 +1,37 @@
+<footer class="py-5">
+  <div class="container">
+    <!-- Footer Content -->
+    <div class="row">
+      <!-- Left Section -->
+      <div class="col-12 col-md-3 mb-4 mb-md-0">
+        <h6 class="fw-bold">Mingəçevir Əmlak Agentliyi</h6>
+        <p class="mb-1"><i class="bi bi-envelope me-2"></i> {{ brokerInformation?.email }}</p>
+        <p><i class="bi bi-telephone me-2"></i>{{ brokerInformation?.phone }}</p>
+      </div>
+
+      <!-- Links: Market -->
+      <div *ngFor="let parameter of parameters" class="col-6 col-md-2">
+        <h6 class="fw-bold text-capitalize">{{ parameter.name }}</h6>
+        <ul class="list-unstyled">
+          <li *ngFor="let selectiveParameter of parameter.selectiveParameterValues">
+            <a (click)="getHouses(parameter, selectiveParameter)" class="text-capitalize cursor-pointer">
+              <i class="bi bi-chevron-right"></i>{{ selectiveParameter.name }}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="border-light">
+
+    <!-- Footer Bottom -->
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <p class="mb-0">&copy; MƏG - Mingəçevir Əmlak Agentliyi</p>
+      </div>
+      <div class="col-12 col-md-6 text-md-end social-media">
+        <a class="text-white me-2" href="{{brokerInformation?.facebook}}"><i class="bi bi-facebook"></i></a>
+        <a class="text-white me-2" href="{{brokerInformation?.instagram}}"><i class="bi bi-instagram"></i></a>
+        <a class="text-white" href="{{brokerInformation?.tiktok}}"><i class="bi bi-tiktok"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,295 @@
+<div class="home-page">
+  <div *ngIf="loadingCategories" class="d-flex justify-content-center align-items-center" style="min-height: 50vh;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading categories...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loadingCategories" class="menu-section" data-bs-ride="carousel">
+    <div class="carousel-inner-container">
+      <div class="carousel-item-container">
+        <div *ngIf="slides!.length > 0" class="carousel-slide-container w-100">
+          <img
+            *ngFor="let image of slides; let i = index"
+            [ngClass]="{'image-active': currentSlide === i}"
+            alt="{{image.title || 'Slide image'}}"
+            class="carousel-image fade"
+            loading="lazy"
+            src="{{image.image}}"
+          />
+        </div>
+        <div class="carousel-overlay"></div>
+        <div class="carousel-caption d-md-block d-flex justify-content-center align-items-center">
+          <div
+            class="menu-wrapper container-xxl w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+            <span class="title">Yeni evinizin açarı bizdədir!</span>
+            <div *ngIf="mainCategories!.length > 0"
+                 class="main-categories d-flex w-100 justify-content-center mt-4 flex-wrap">
+              <a
+                (click)="selectMainCategory(category)"
+                *ngFor="let category of mainCategories"
+                [class.active]="selectedMainCategory?.id === category.id">
+                {{ category.name }}
+              </a>
+            </div>
+            <div *ngIf="selectedSubCategories!.length > 0"
+                 class="sub-categories d-flex w-100 mt-2 justify-content-center flex-wrap">
+              <div *ngFor="let sub of selectedSubCategories" class="dropdown mt-2">
+                <button (click)="getHouses(sub.id)" class="btn bg-white text-black rounded-pill" type="button">
+                  <span>{{ sub.name }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="loadingSections" class="d-flex justify-content-center align-items-center mt-5"
+         style="min-height: 30vh;">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading sections...</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!loadingSections && sections !== undefined">
+      <div *ngFor="let section of sections" class="house-section mt-5">
+        <div class="title w-100 d-flex justify-content-center">
+          <h1 class="text-capitalize">{{ section.name }}</h1>
+        </div>
+        <div class="houses container-xxl mt-5">
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3 row-cols-lg-5 gy-3 w-100">
+            <div *ngFor="let house of section!.houses">
+              <app-house-card [house]="house"></app-house-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="home-share-request">
+      <div class="container py-4 rounded">
+        <div class="row">
+          <!-- Timer Display -->
+          <div *ngIf="timeLeft > 0" class="time-left w-100 d-flex justify-content-center">
+            <h1>Yenidən ev istəyi göndərmək üçün {{ timeLeft }} saniyə qalıb</h1>
+          </div>
+
+          <!-- Image Upload Section -->
+          <div *ngIf="timeLeft <= 0" class="col-lg-6 main-operations">
+            <h4 class="text-muted">Sənində Evin Olsun Elanda!</h4>
+            <div class="picture-upload mt-4">
+              <div class="row g-3">
+                <div *ngFor="let img of images; let i = index" class="col-12 col-md-6">
+                  <div class="upload-box d-flex justify-content-center align-items-center position-relative">
+                    <label class="text-center w-100 h-100 d-flex justify-content-center align-items-center">
+                      <ng-container *ngIf="!img.uploading && !img.url">
+                        <input
+                          (change)="onFileChange($event, i)"
+                          [disabled]="img.uploading"
+                          accept="image/png,image/jpeg,image/jpg,image/heic,image/heif,image/webp,image/gif,image/bmp,image/tiff"
+                          class="d-none"
+                          type="file"
+                        >
+                        <span class="upload-text">Şəkil Yüklə</span>
+                      </ng-container>
+                      <div *ngIf="img.uploading" class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Yüklənir...</span>
+                      </div>
+                      <img *ngIf="img.url" [src]="img.url" alt="Uploaded image" class="uploaded-image">
+                      <i
+                        (click)="deleteImage(i)"
+                        *ngIf="img.url && !img.uploading"
+                        class="bi bi-x-lg text-danger delete-icon position-absolute top-0 end-0 m-2 cursor-pointer"
+                      ></i>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Section -->
+          <div *ngIf="timeLeft <= 0" class="col-lg-6 position-relative">
+            <div *ngIf="loadingParameters" class="d-flex justify-content-center align-items-center"
+                 style="min-height: 20vh;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading parameters...</span>
+              </div>
+            </div>
+
+            <form (ngSubmit)="submit()" *ngIf="!loadingParameters" class="needs-validation" novalidate>
+              <div class="mb-4">
+                <h5>Şəxsi Məlumatlar</h5>
+                <div class="row g-3 mt-1">
+                  <div class="col-md-6">
+                    <input
+                      [(ngModel)]="requester"
+                      class="form-control rounded-pill"
+                      maxlength="100"
+                      name="requester"
+                      placeholder="Ad və Soyad"
+                      required
+                      type="text"
+                    >
+                    <div class="invalid-feedback">Adınızı qeyd edin</div>
+                  </div>
+                  <div class="col-md-6">
+                    <input
+                      [(ngModel)]="phone"
+                      class="form-control rounded-pill"
+                      maxlength="15"
+                      name="phone"
+                      placeholder="Telefon"
+                      required
+                      type="text"
+                    >
+                    <div class="invalid-feedback">Telefon nömrənizi qeyd edin</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-5">
+                <h5>Daşınmaz Əmlak Haqqında</h5>
+                <div class="row g-3 mt-1">
+                  <!-- Main Category Dropdown -->
+                  <div *ngIf="mainCategories!.length > 0" class="col-md-6">
+                    <div class="dropdown">
+                      <button
+                        aria-expanded="false"
+                        class="btn dropdown-toggle rounded-pill w-100 border"
+                        data-bs-toggle="dropdown"
+                        id="mainCategoryDropdown"
+                        type="button"
+                      >
+                        {{ selectedMainCategoryForRequest?.name || 'Kateqoriya seçin' }}
+                      </button>
+                      <ul aria-labelledby="mainCategoryDropdown" class="dropdown-menu">
+                        <li class="cursor-pointer">
+                          <a (click)="selectMainCategoryForRequest(undefined)" class="dropdown-item">Seçilməyib</a></li>
+                        <li *ngFor="let category of mainCategories" class="cursor-pointer">
+                          <a (click)="selectMainCategoryForRequest(category)" class="dropdown-item">
+                            {{ category.name }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Sub Category Dropdown -->
+                  <div *ngIf="subCategoriesForHouseRequest!.length > 0" class="col-md-6">
+                    <div class="dropdown">
+                      <button
+                        aria-expanded="false"
+                        class="btn dropdown-toggle rounded-pill w-100 border"
+                        data-bs-toggle="dropdown"
+                        id="subCategoryDropdown"
+                        type="button"
+                      >
+                        {{ selectedSubCategoryForRequest?.name || 'Əmlak Növünü seçin' }}
+                      </button>
+                      <ul aria-labelledby="subCategoryDropdown" class="dropdown-menu">
+                        <li class="cursor-pointer"><a (click)="selectSubCategoryForRequest(undefined)"
+                                                      class="dropdown-item">
+                          Seçilməyib
+                        </a>
+                        </li>
+                        <li *ngFor="let sub of subCategoriesForHouseRequest" class="cursor-pointer">
+                          <a (click)="selectSubCategoryForRequest(sub)" class="dropdown-item">
+                            {{ sub.name }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Price Input and Type -->
+                  <div *ngIf="priceParameter" class="col-md-3 price-parameter">
+                    <input
+                      (input)="onInputChangeParameter(priceParameter.id, $event)"
+                      [(ngModel)]="price"
+                      class="form-control rounded-pill"
+                      min="1"
+                      name="price"
+                      placeholder="Qiymət AZN"
+                      required
+                      type="number"
+                    >
+                    <div class="invalid-feedback">Qiymət qeyd edin</div>
+                  </div>
+                  <div class="col-md-3">
+                    <select
+                      (change)="onSelectPriceType($event)"
+                      class="form-select rounded-pill"
+                      name="priceType"
+                      required
+                    >
+                      <option disabled selected value="">Ödəniş növü</option>
+                      <option [value]="PriceType.MONTH">Aylıq</option>
+                      <option [value]="PriceType.SALE">Satış</option>
+                      <option [value]="PriceType.MORTGAGE">İpoteka</option>
+                      <option [value]="PriceType.DAY">Günlük</option>
+                    </select>
+                    <div class="invalid-feedback">Ödəniş növü seçin</div>
+                  </div>
+
+                  <!-- Location Selector -->
+                  <div *ngIf="locationParameter && locationParameter!.selectiveParameterValues!.length > 0"
+                       class="col-md-6 location-parameter">
+                    <select
+                      (change)="onLocationSelectChangeParameter(locationParameter!.id, $event)"
+                      class="form-select rounded-pill"
+                      name="location"
+                      required
+                    >
+                      <option disabled selected>{{ locationParameter!.name || 'Məkan seçin' }}</option>
+                      <option *ngFor="let lp of locationParameter!.selectiveParameterValues" [value]="lp.id">
+                        {{ lp.name }}
+                      </option>
+                    </select>
+                    <div class="invalid-feedback">Məkan seçin</div>
+                  </div>
+
+                  <!-- Input Parameters -->
+                  <ng-container *ngFor="let par of parameters">
+                    <div *ngIf="par.type === ParameterTypeEnum.INPUT" class="col-md-6 input-parameter">
+                      <input
+                        (input)="onInputChangeParameter(par.id, $event)"
+                        [placeholder]="par.name || 'Dəyər qeyd edin'"
+                        class="form-control rounded-pill"
+                        min="1"
+                        name="inputParam-{{par.id}}"
+                        type="number"
+                      >
+                    </div>
+                  </ng-container>
+
+                  <!-- Selective Parameters -->
+                  <ng-container *ngFor="let par of parameters">
+                    <div *ngIf="par.type === ParameterTypeEnum.SELECT" class="col-md-6 selective-parameter">
+                      <select
+                        (change)="onSelectChangeParameter(par.id, $event)"
+                        class="form-select rounded-pill"
+                        name="selectParam-{{par.id}}"
+                      >
+                        <option [value]="undefined">Seçilməyib</option>
+                        <option disabled selected>{{ par.name || 'Seçin' }}</option>
+                        <option *ngFor="let sp of par.selectiveParameterValues" [value]="sp.id">
+                          {{ sp.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+
+              <div class="submit-button-container text-center">
+                <button class="btn rounded-pill px-4 submit" type="submit">Göndər</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

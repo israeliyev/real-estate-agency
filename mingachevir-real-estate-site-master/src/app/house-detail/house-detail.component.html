@@ -1,0 +1,146 @@
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="min-height: 50vh;">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div *ngIf="houseDetail && !loading" class="house-detail position-relative">
+  <div class="container-xxl mt-4">
+    <div class="row">
+      <div class="card-operations w-100 mb-2 d-inline d-md-none">
+        <div class="like me-2 d-flex align-items-center justify-content-center">
+          <span class="me-1">Seçilmişlərdə saxla</span>
+          <i (click)="addToBasket()" *ngIf="!isInBasket" class="bi bi-heart"></i>
+          <i (click)="removeFromBasket()" *ngIf="isInBasket" class="bi bi-heart-fill"></i>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-8 mb-4">
+        <!-- Custom Carousel -->
+        <div #carousel class="carousel">
+          <div *ngIf="mediaItems.length; else noMedia" class="carousel-inner">
+            <!-- Video (if exists, shown first) -->
+            <div *ngFor="let media of mediaItems; let i = index" [class.active]="i === currentSlideIndex"
+                 class="carousel-item">
+              <ng-container *ngIf="media.type === 'video'; else imageTemplate">
+                <video class="d-block w-100" controls>
+                  <source [src]="media.path || 'assets/img/no-image.png'" type="video/mp4"/>
+                  Brovseriniz bu medianı dəstəkləmir
+                </video>
+              </ng-container>
+              <ng-template #imageTemplate>
+                <img [src]="media.path || 'assets/img/no-image.png'" alt="Media {{i + 1}}"
+                     class="d-block w-100"/>
+              </ng-template>
+            </div>
+          </div>
+          <ng-template #noMedia>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img alt="Media tapılmadı" class="d-block w-100" src="assets/img/no-image.png"/>
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- Media Navigator (Thumbnails) -->
+          <div *ngIf="mediaItems.length" class="row g-2 mt-2 media-navigator">
+            <!-- Video Thumbnail (if exists, shown first) -->
+            <div *ngIf="houseDetail.houseVideo" class="col-4 col-sm-2 position-relative">
+              <video
+                (click)="selectMedia(0)"
+                [class.selected]="currentSlideIndex === 0"
+                [src]="houseDetail.houseVideo"
+                alt="Video Thumbnail"
+                class="img-thumbnail"></video>
+            </div>
+            <!-- Image Thumbnails -->
+            <div *ngFor="let image of houseDetail.houseImages; let i = index" class="col-4 col-sm-2 position-relative">
+              <img
+                (click)="selectMedia(houseDetail.houseVideo ? i + 1 : i)"
+                [class.selected]="currentSlideIndex === (houseDetail.houseVideo ? i + 1 : i)"
+                [src]="image.path || 'assets/placeholder-image.jpg'"
+                alt="Thumbnail {{i + 1}}"
+                class="img-thumbnail"
+              />
+            </div>
+          </div>
+
+          <!-- Carousel Controls -->
+          <button
+            (click)="prevSlide()"
+            class="carousel-control carousel-control-prev"
+          >
+            <span aria-hidden="true" class="carousel-control-icon carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button (click)="nextSlide()"
+                  class="carousel-control carousel-control-next"
+          >
+            <span aria-hidden="true" class="carousel-control-icon carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+        <!-- Description Card -->
+        <div class="description-card d-none d-lg-block">
+          <p class="description-text">
+            {{ houseDetail.description || '' }}
+          </p>
+          <div class="description-footer">
+            <span class="description-id">№ {{ houseDetail.id || 'N/A' }}</span>
+            <i class="bi bi-dot"></i>
+            <span class="description-time">{{ houseDetail.createDate | date:'dd.MM.yyyy' || 'Tarix yoxdu' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Section: Property Details -->
+      <div class="col-12 col-lg-4">
+        <div class="card-operations d-none d-md-inline">
+          <div class="like d-flex align-items-center mb-3 justify-content-end">
+            <span class="me-1">Seçilmişlərdə saxla</span>
+            <i (click)="addToBasket()" *ngIf="!isInBasket" class="bi bi-heart"></i>
+            <i (click)="removeFromBasket()" *ngIf="isInBasket" class="bi bi-heart-fill"></i>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h3>{{ priceParameter.value || '0' }} AZN <sub>{{ houseDetail.priceType | priceType }}</sub></h3>
+            <h5 class="card-title">{{ houseDetail.name || 'Elan adı tapılmadı' }}</h5>
+            <span class="mb-2">{{ locationParameter.value || 'Bölgə tapılmadı' }}</span>
+
+            <ul class="deatil_features">
+              <li><strong>Əmlak</strong>{{ houseDetail.status ? 'Verilib' : 'Verilməyib' || 'Verilməyib' }}</li>
+              <li><strong>Məhsul Kodu:</strong>{{ houseDetail.code || 'Məhsul kodu yoxdur' }}</li>
+            </ul>
+
+            <ul class="deatil_features">
+              <li *ngFor="let ip of inputParameters"><strong>{{ ip.name || 'Yoxdur' }}:</strong>{{ ip.value || '0' }}
+              </li>
+              <li *ngFor="let ip of selectParameters"><strong>{{ ip.name || 'Yoxdur' }}
+                :</strong>{{ ip.value || 'Yoxdur' }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="description-card d-lg-none mb-4">
+          <p [innerHTML]="formattedDescription"
+             class="description-text"></p>
+          <div class="description-footer">
+            <span class="description-id">№ {{ houseDetail.id || 'N/A' }}</span>
+            <i class="bi bi-dot"></i>
+            <span class="description-time">{{ houseDetail.createDate | date:'dd.MM.yyyy' || 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- No Data Template -->
+<div *ngIf="!loading && !houseDetail" class="container mt-4">
+  <div class="alert alert-warning text-center" role="alert">
+    Ev təfərrüatları yoxdur. Lütfən, sonra yenidən cəhd edin
+  </div>
+</div>

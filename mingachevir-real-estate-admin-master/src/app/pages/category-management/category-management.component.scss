@@ -1,0 +1,239 @@
+// Consolidated Variables (removed duplicates)
+$primary-color: #3498db; // Used consistently, replaced #007bff
+$danger-color: #e74c3c;
+$background-color: #f8f9fa;
+$text-color: #2c3e50;
+$secondary-color: #6c757d;
+$hover-color: #f1f1f1;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$border-radius: 8px;
+$border-color: #dee2e6;
+$table-header-bg: linear-gradient(135deg, #3498db, #2980b9);
+$table-header-color: #ffffff;
+$alert-warning-bg: #fff3cd;
+$alert-warning-border: #ffeeba;
+$alert-warning-text: #856404;
+$button-hover-effect: brightness(90%);
+$light-bg: #f8f9fa;
+$hover-bg: #e9ecef;
+$link-hover-bg: lighten($primary-color, 40%);
+
+// Global Styles
+body {
+  font-family: 'Arial', sans-serif; // Ensured quotes are correct
+  background-color: $background-color;
+  padding: 20px;
+}
+
+hr {
+  margin: 0 !important;
+}
+
+h3 {
+  color: $text-color;
+  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.submit-btn {
+  padding: 0.6rem 0 !important;
+  font-size: 1.4rem;
+}
+
+// Table Styles
+.table {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px $shadow-color;
+  margin-bottom: 3rem;
+  width: 100%;
+  min-width: 600px;
+
+  thead {
+    background: $table-header-bg;
+    color: $table-header-color;
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+  }
+
+  tbody tr:hover {
+    background-color: $hover-color;
+    transition: background-color 0.3s ease;
+  }
+}
+
+// Button Styles
+.btn {
+  width: 100%;
+  border-radius: $border-radius;
+  padding: 5px 0;
+  font-size: 14px;
+  font-weight: 600;
+  transition: filter 0.3s ease;
+
+  &-primary {
+    background: $primary-color;
+    border: none;
+    color: #ffffff;
+
+    &:hover {
+      filter: $button-hover-effect;
+    }
+  }
+
+  &-danger {
+    background: $danger-color;
+    border: none;
+    color: #ffffff;
+
+    &:hover {
+      filter: $button-hover-effect;
+    }
+  }
+}
+
+// Alert Styles
+.alert {
+  border-radius: $border-radius;
+  margin-bottom: 20px;
+
+  &-warning {
+    background-color: $alert-warning-bg;
+    border-color: $alert-warning-border;
+    color: $alert-warning-text;
+  }
+}
+
+// Form Control Styles
+.form-control {
+  border-radius: $border-radius;
+  border: 1px solid #ced4da;
+  padding: 6px 12px;
+
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 5px rgba($primary-color, 0.5);
+  }
+}
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+  --bs-table-color-type: rgba(187, 206, 248, 0.4);
+  --bs-table-bg-type: rgba(187, 217, 248, 0.3);
+}
+
+// Derelict Houses Container
+.derelict-houses-container {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: $light-bg;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px $shadow-color;
+
+  span {
+    color: $danger-color;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 5rem;
+    text-align: center;
+    letter-spacing: 1px;
+    font-family: 'Inter', sans-serif; // Ensured quotes are correct
+  }
+}
+
+// Derelict Houses Table
+.derelict-houses-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px $shadow-color;
+  min-width: 600px;
+
+  thead {
+    background: $primary-color;
+    color: #fff;
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      text-transform: inherit;
+      letter-spacing: 0.5px;
+
+      &:first-child {
+        width: 60px;
+        text-align: center;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $border-color;
+      transition: background 0.3s ease;
+      cursor: pointer;
+
+      &:nth-child(even) {
+        background: lighten($light-bg, 2%);
+      }
+
+      &:hover {
+        background: $hover-bg;
+      }
+
+      td {
+        padding: 1rem;
+        color: $secondary-color;
+
+        &:first-child {
+          text-align: center;
+          font-weight: 500;
+          color: $primary-color;
+        }
+      }
+    }
+
+    tr:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .table,
+  .derelict-houses-table {
+    font-size: 0.9rem;
+
+    th, td {
+      padding: 0.75rem;
+    }
+  }
+
+  .derelict-houses-container {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .table,
+  .derelict-houses-table {
+    display: table;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    min-width: 600px;
+  }
+
+  .derelict-houses-container {
+    overflow-x: auto;
+  }
+}
+

@@ -1,0 +1,25 @@
+
+footer {
+  background-color: #2F5E99;
+  color: white;
+  font-size: 13px;
+}
+
+footer .container li > a {
+  text-decoration: none;
+  color: #FFFFFF9C;
+}
+
+footer .container .list-unstyled i {
+  font-size: 10px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+@media (max-width: 576px) {
+  footer .social-media {
+    margin-top: 10px;
+  }
+}

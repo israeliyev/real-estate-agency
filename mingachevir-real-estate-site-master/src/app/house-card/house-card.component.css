@@ -1,0 +1,135 @@
+.card {
+  border-color: transparent;
+  display: inline-block;
+  vertical-align: top;
+  width: 240px;
+  height: 278px !important;
+  background-color: #fff;
+  text-decoration: none;
+  box-shadow: 0 17px 34px 0 rgba(44, 39, 56, 0.04), 0 8px 17px 0 rgba(44, 39, 56, 0.02);
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.card i {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  color: #00AEFF;
+  background-color: #f6f7f8;
+  border-radius: 50%;
+  padding: 1px 5px 0 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.card .card-body {
+  padding: 10px;
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 42%;
+}
+
+.card .card-body p {
+  display: -webkit-box;
+  max-height: 38.4px;
+  font-size: 15px;
+  line-height: 1.2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  box-sizing: border-box;
+  color: rgb(33, 44, 58);
+  overflow: hidden;
+  margin-bottom: 5px !important;
+}
+
+.card .card-body h6 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: rgb(33, 44, 58);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card .card-body span {
+  text-overflow: ellipsis;
+  width: 80%;
+  color: rgb(141, 148, 173);
+  font-size: 12px;
+  position: absolute;
+  bottom: 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+img {
+  height: 160px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.card .card-body .card-text {
+  display: -webkit-box;
+  max-height: 38px;
+  font-size: 16px;
+  line-height: 1.2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  box-sizing: border-box;
+  color: rgb(33, 44, 58);
+  margin: 0;
+  overflow: hidden;
+}
+
+.card .card-body .card-price {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: rgb(33, 44, 58);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+@media (max-width: 576px) {
+  .card.custom-card {
+    width: 165px !important;
+    height: 198px !important;
+  }
+
+  .card.custom-card img {
+    height: 100px !important;
+    cursor: pointer !important;
+  }
+
+  .card.custom-card .card-price {
+    font-size: 14px !important;
+    font-weight: bold !important;
+  }
+
+  .card.custom-card .card-text {
+    font-size: 12px !important;
+  }
+
+  .card.custom-card .card-body {
+    height: 50% !important;
+  }
+}
+
+
+@media (max-width: 750px) {
+
+  .custom-card .custom-card-body .card-price {
+    font-weight: bold;
+  }
+
+  .custom-card .custom-card-body .card-text {
+  }
+
+  .custom-card .custom-card-body {
+    height: 44%;
+  }
+}

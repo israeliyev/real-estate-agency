@@ -1,0 +1,22 @@
+<div class="houses-container mb-4 mt-4">
+  <div class="container-xxl d-flex flex-wrap">
+    <div *ngIf="houses && houses.length > 0" class="d-flex justify-content-center w-100 mb-4">
+      <div class="basket-title">
+        <h1>Seçilmişlər</h1>
+        <p>Seçtiyiniz məhsullar burdadır</p>
+      </div>
+    </div>
+
+    <div *ngIf="!houses || houses.length <= 0" class="d-flex justify-content-center w-100 mb-4">
+      <div class="basket-title">
+        <h1 class="mb-3">Seçilmiş Evlər Yoxdur</h1>
+        <a href="/ana-sehife">Geri Dön</a>
+      </div>
+    </div>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-3 row-cols-lg-5 gy-3 w-100">
+      <div *ngFor="let house of houses">
+        <app-house-card [house]="house"></app-house-card>
+      </div>
+    </div>
+  </div>
+</div>

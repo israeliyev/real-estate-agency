@@ -1,0 +1,15 @@
+<div class="card custom-card h-100">
+  <img
+    (click)="openHouseDetail(house.id)"
+    [src]="house.coverImage || 'assets/img/no-image.png'"
+    alt="House Image"
+    class="card-img-top"
+  />
+  <i (click)="addToBasket()" *ngIf="!isInBasket" class="bi bi-heart"></i>
+  <i (click)="removeFromBasket()" *ngIf="isInBasket" class="bi bi-heart-fill"></i>
+  <div class="card-body custom-card-body">
+    <div class="card-price mb-1">{{ house.price }} AZN {{ house.priceType | priceType }}</div>
+    <div class="card-text mb-4">{{ house.name }}</div>
+    <span class="card-date">{{ house.location }}</span>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+@import '../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  nb-card {
+    transform: translate3d(0, 0, 0);
+  }
+
+  :host ng2-smart-table table > tbody > tr.hide-action > td > ng2-st-tbody-edit-delete {
+    display:none;
+    visibility: hidden;
+  }
+}
+
+.ng2-smart-actions {
+  display:none;
+  visibility: hidden;
+}

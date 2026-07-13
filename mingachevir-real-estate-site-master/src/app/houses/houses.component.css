@@ -1,0 +1,185 @@
+.houses-container .filter .item button {
+  font-size: 14px;
+  border-radius: 4px !important;
+  color: #939292 !important;
+  line-height: 25px;
+  border: none;
+}
+
+.houses-container .sorting .item button {
+  font-size: 14px;
+  border-radius: 4px !important;
+  color: #939292 !important;
+  line-height: 25px;
+  border: none;
+}
+
+.houses-container .filter .item button > i {
+  color: #0396da;
+}
+
+.houses-container .sorting .item button > i {
+  color: #0396da;
+}
+
+.houses-container .filter .item li {
+  cursor: pointer;
+}
+
+.houses-container .sorting .item li {
+  cursor: pointer;
+}
+
+.houses-container .filter .search button {
+  background-color: #00AEFF !important;
+  color: white !important;
+  border-radius: 4px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  line-height: 25px;
+  border: none;
+}
+
+.dropdown a {
+  text-transform: capitalize;
+}
+
+.dropdown button span {
+  text-transform: capitalize;
+}
+
+.houses-container .filter .dropdown-menu input {
+  display: inline-block;
+  width: 90px;
+  height: 30px;
+  outline: none;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  color: #666;
+  font-size: 14px;
+}
+
+.houses-container .filter .dropdown-menu span {
+  margin: 0 5px 0 5px;
+  font-size: 20px;
+}
+
+.houses-container .sorting .dropdown-menu span {
+  margin: 0 5px 0 5px;
+  font-size: 20px;
+}
+
+.houses-container .house-section .title {
+  width: 100%;
+  height: 58px;
+  padding: 0;
+  margin: 0 0 25px;
+  background-color: #f6f7fa;
+  border-top: 1px solid #f1f3f7;
+  border-bottom: 1px solid #f1f3f7;
+  display: flex;
+  align-items: center;
+}
+
+.houses-container .house-section .title h2 {
+  color: #8d94ad;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  margin: 0;
+  text-align: center;
+}
+
+.houses-container .main-houses {
+  margin-top: 2rem;
+  border-top: 1px solid #e3e5e5;
+}
+
+.houses-container .pagination-info .non-active {
+  color: #00AEFF !important;
+}
+
+.houses-container .pagination-info .active {
+  color: white !important;
+}
+
+.not-found-container {
+  text-align: center;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in-out;
+  width: 100%;
+}
+
+.not-found-icon {
+  font-size: 60px;
+  color: #e63946;
+  margin-bottom: 20px;
+}
+
+.not-found-title {
+  font-size: 24px;
+  color: #1d3557;
+  margin-bottom: 10px;
+}
+
+.not-found-message {
+  font-size: 16px;
+  color: #457b9d;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.back-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #00AEFF;
+  color: #1d3557;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #8ecae6;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pagination {
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.page-item .page-link {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    justify-content: center;
+  }
+
+  .page-item .page-link {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}
+

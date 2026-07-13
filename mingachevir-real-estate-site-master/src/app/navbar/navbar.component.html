@@ -1,0 +1,73 @@
+<nav class="top-navbar text-white">
+  <div class="container-xxl d-flex justify-content-between align-items-center">
+
+    <div class="contact-info d-flex align-items-center">
+      <a class="d-none d-lg-flex" href="#">
+      <span class="me-4 d-flex align-items-center">
+        <i class="bi bi-envelope me-2"></i> {{ brokerInformation?.email }}
+      </span>
+      </a>
+
+      <a href="{{brokerInformation?.instagram}}">
+        <span class="d-flex align-items-center">
+        <i class="bi bi-geo-alt-fill me-1"></i>  {{ brokerInformation?.location }}
+      </span>
+      </a>
+    </div>
+
+    <div class="social-media d-flex align-items-center">
+      <a class="me-3 text-white icon-wrapper" href="{{brokerInformation?.facebook}}">
+        <i class="bi bi-facebook"></i>
+      </a>
+      <a class="me-3 text-white icon-wrapper" href="{{brokerInformation?.instagram}}">
+        <i class="bi bi-instagram"></i>
+      </a>
+      <a class="text-white icon-wrapper" href="{{brokerInformation?.tiktok}}">
+        <i class="bi bi-tiktok"></i>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<nav class="sub-navbar bg-white">
+  <div class="container-xxl d-flex justify-content-between align-items-center">
+    <a class="col-2" href="/">
+      <div class="logo">
+        <img alt="" class="d-none d-sm-flex" src="../assets/img/logo-navbar.png">
+        <img alt="" class="d-sm-none" src="../assets/img/logo.png">
+      </div>
+    </a>
+    <div class="search d-none d-lg-flex align-items-center col-4">
+      <input [(ngModel)]="searchKey" [value]="searchKey" placeholder="Axtar..." type="text">
+      <i (click)="searchProducts()" class="bi bi-search text-white"></i>
+    </div>
+
+    <div class="basket d-none d-sm-flex align-items-center">
+      <a (click)="goBasket()" class="d-flex align-items-center">
+        <span class="mb-1">Seçilmişlər - </span>
+        <div class="basket-container d-flex justify-content-center align-items-center">
+          <i class="bi bi-heart"></i>
+          <span class="basket-count position-absolute">{{ basketCount }}</span>
+        </div>
+      </a>
+    </div>
+    <div class="phone text-white">
+      <i class="bi bi-telephone-fill me-2"></i>
+      <span>{{ brokerInformation?.phone }}</span>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between responsive-section">
+    <div class="responsive-search d-lg-none align-items-center col-4">
+      <input [(ngModel)]="searchKey" [value]="searchKey" placeholder="Axtar..." type="text">
+      <i (click)="searchProducts()" class="bi bi-search text-white"></i>
+    </div>
+
+    <a (click)="goBasket()" class="d-flex align-items-center d-sm-none">
+      <div class="basket-container d-flex justify-content-center align-items-center">
+        <i class="bi bi-heart"></i>
+        <span class="basket-count position-absolute">{{ basketCount }}</span>
+      </div>
+    </a>
+  </div>
+</nav>
