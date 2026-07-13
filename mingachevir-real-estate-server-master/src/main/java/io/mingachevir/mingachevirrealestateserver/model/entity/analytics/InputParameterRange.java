@@ -14,7 +14,7 @@ import lombok.Setter;
 @Entity
 
 public class InputParameterRange extends BaseAuditEntity {
-    // Getters and Setters
+
     @ManyToOne
     @JoinColumn(name = "parameter_id", referencedColumnName = "id")
     private Parameters parameter;

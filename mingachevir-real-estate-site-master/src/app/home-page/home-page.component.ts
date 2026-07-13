@@ -417,7 +417,6 @@ export class HomePageComponent implements OnInit {
       })),
       selectiveParameters: Array.from(this.selectiveParameterValues.entries()).map(([parameterId, value]) => {
         const param = this.parameters.find(p => p.id === parameterId);
-        // Fix: guard param and selectiveValue with ?.
         const selectiveValue = param?.selectiveParameterValues?.find(sp => sp.id === value);
         return {
           id: value,

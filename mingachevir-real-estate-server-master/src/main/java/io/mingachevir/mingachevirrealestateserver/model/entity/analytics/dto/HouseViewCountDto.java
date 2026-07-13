@@ -8,13 +8,12 @@ public class HouseViewCountDto {
     private String houseName;
     private Long viewCount;
 
-    // Constructor, Getters, and Setters
     public HouseViewCountDto(Long houseId, String houseName, Long viewCount) {
         this.houseId = houseId;
         this.houseName = houseName;
         this.viewCount = viewCount;
     }
-    // Getters and Setters
+
 }
 
 

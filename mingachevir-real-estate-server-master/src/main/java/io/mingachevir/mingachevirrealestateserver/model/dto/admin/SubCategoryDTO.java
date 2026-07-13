@@ -30,7 +30,7 @@ public class SubCategoryDTO {
         } else {
             entity.setMainCategory(null);
         }
-// Preserve existing parameters if not explicitly updated
+
         return entity;
     }
 }

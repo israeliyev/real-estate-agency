@@ -24,7 +24,6 @@ public class MainCategoryDto {
             this.createDate = mainCategory.getCreateDate();
             this.updateDate = mainCategory.getUpdateDate();
 
-            // Convert subCategories if not null (Lazy fetching safety)
             if (mainCategory.getSubCategories() != null && !mainCategory.getSubCategories().isEmpty()) {
                 this.subCategories = mainCategory.getSubCategories()
                         .stream()

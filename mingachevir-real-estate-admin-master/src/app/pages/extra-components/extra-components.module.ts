@@ -17,8 +17,6 @@ import {
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { ExtraComponentsRoutingModule } from './extra-components-routing.module';
-
-// components
 import { ExtraComponentsComponent } from './extra-components.component';
 
 const COMPONENTS = [

@@ -154,7 +154,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public GenericResponse<String> deleteOrUpdateCategoryAndParameters(CategoryUpdateRequestDTO request) {
         try {
-            // Save Main Categories and map tempId to real id
+
             Map<Long, Long> mainCategoryTempIdToId = new HashMap<>();
             List<MainCategory> savedMainCategories;
             if (request.getMainCategoriesToUpdate() != null) {
@@ -182,7 +182,6 @@ public class CategoryServiceImpl implements CategoryService {
                 savedMainCategories = new ArrayList<>();
             }
 
-            // Save Sub Categories and bind to Main Categories using tempId
             Map<Long, Long> subCategoryTempIdToId = new HashMap<>();
             List<SubCategory> savedSubCategories;
             if (request.getSubCategoriesToUpdate() != null) {
@@ -228,7 +227,6 @@ public class CategoryServiceImpl implements CategoryService {
                 savedSubCategories = new ArrayList<>();
             }
 
-            // Save Parameters and bind to Sub Categories using tempId
             Map<Long, Long> parameterTempIdToId = new HashMap<>();
             List<Parameters> savedParameters;
             if (request.getParametersToUpdate() != null) {
@@ -273,7 +271,6 @@ public class CategoryServiceImpl implements CategoryService {
                 savedParameters = new ArrayList<>();
             }
 
-            // Save Selective Parameters and bind to Parameters using tempId
             if (request.getSelectiveParametersToUpdate() != null) {
                 selectiveParameterValueJpaRepository.saveAll(
                         request.getSelectiveParametersToUpdate().stream()
@@ -307,7 +304,6 @@ public class CategoryServiceImpl implements CategoryService {
                 );
             }
 
-            // Handle deletions
             if (request.getMainCategoryIdsToDelete() != null) {
                 mainCategoryJpaRepository.updateStatusByIds(request.getMainCategoryIdsToDelete());
             }

@@ -168,21 +168,15 @@ export const DEFAULT_THEME = {
       itemBorderColor: baseThemeVariables.primary,
       lineStyle: 'solid',
       lineWidth: '4',
-
-      // first line
       firstAreaGradFrom: baseThemeVariables.bg3,
       firstAreaGradTo: baseThemeVariables.bg3,
       firstShadowLineDarkBg: 'rgba(0, 0, 0, 0)',
-
-      // second line
       secondLineGradFrom: baseThemeVariables.primary,
       secondLineGradTo: baseThemeVariables.primary,
 
       secondAreaGradFrom: 'rgba(51, 102, 255, 0.2)',
       secondAreaGradTo: 'rgba(51, 102, 255, 0)',
       secondShadowLineDarkBg: 'rgba(0, 0, 0, 0)',
-
-      // third line
       thirdLineGradFrom: baseThemeVariables.success,
       thirdLineGradTo: baseThemeVariables.successLight,
 
@@ -200,18 +194,12 @@ export const DEFAULT_THEME = {
 
       axisFontSize: '16',
       axisTextColor: baseThemeVariables.fg,
-
-      // first bar
       firstLineGradFrom: baseThemeVariables.bg3,
       firstLineGradTo: baseThemeVariables.bg3,
       firstLineShadow: 'rgba(0, 0, 0, 0)',
-
-      // second bar
       secondLineGradFrom: baseThemeVariables.primary,
       secondLineGradTo: baseThemeVariables.primary,
       secondLineShadow: 'rgba(0, 0, 0, 0)',
-
-      // third bar
       thirdLineGradFrom: baseThemeVariables.success,
       thirdLineGradTo: baseThemeVariables.successLight,
       thirdLineShadow: 'rgba(0, 0, 0, 0)',

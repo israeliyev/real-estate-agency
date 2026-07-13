@@ -76,13 +76,13 @@
 }
 
 
-/* Existing styles remain unchanged... */
+
 
 .space-info {
   margin-top: 1rem;
   display: flex;
   align-items: center;
-  gap: 1rem; /* Space between labels and progress bar */
+  gap: 1rem;
 }
 
 .space-labels {
@@ -97,26 +97,26 @@
 }
 
 nb-progress-bar {
-  flex: 1; /* Takes remaining space */
-  height: 1.5rem; /* Match image height */
+  flex: 1;
+  height: 1.5rem;
   border-radius: 0.25rem;
 
-  /* Customize colors to match the image */
+
   &.ng-progress-bar-danger {
-    background-color: #ff3d71; /* Red for danger */
+    background-color: #ff3d71;
   }
   &.ng-progress-bar-warning {
-    background-color: #ffaa00; /* Yellow for warning */
+    background-color: #ffaa00;
   }
   &.ng-progress-bar-info {
-    background-color: #00d68f; /* Blue for info */
+    background-color: #00d68f;
   }
   &.ng-progress-bar-success {
-    background-color: #00d68f; /* Green for success */
+    background-color: #00d68f;
   }
 }
 
-/* Ensure houses table keeps 5-column layout */
+
 .house-list-card .even-table {
   th, td {
     width: 20%;

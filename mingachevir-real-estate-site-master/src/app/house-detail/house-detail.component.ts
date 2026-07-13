@@ -189,8 +189,6 @@ export class HouseDetailComponent implements OnInit, OnDestroy {
       this.locationParameter = {};
       return;
     }
-
-    // Fix 4: use optional chaining + nullish coalescing on all nested properties
     this.inputParameters = (this.houseDetail.inputParameters ?? [])
       .filter(param =>
         param?.parameter?.name &&

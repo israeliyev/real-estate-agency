@@ -5,11 +5,10 @@ public class HouseBasketCountDto {
     private String houseName;
     private Long basketCount;
 
-    // Constructor, Getters, and Setters
     public HouseBasketCountDto(Long houseId, String houseName, Long basketCount) {
         this.houseId = houseId;
         this.houseName = houseName;
         this.basketCount = basketCount;
     }
-    // Getters and Setters
+
 }

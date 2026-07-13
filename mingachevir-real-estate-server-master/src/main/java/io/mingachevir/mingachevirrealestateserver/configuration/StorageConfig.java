@@ -30,11 +30,10 @@ public class StorageConfig {
     public S3Client s3Client() {
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
 
-        // Cloudflare R2 requires:
-        // - region "auto"
-        // - explicit endpoint override pointing to the R2 S3 API
-        // - path-style access (some SDK versions default to virtual-hosted which R2 also supports,
-        //   but path-style is the safest cross-version choice)
+
+
+
+
         return S3Client.builder()
                 .region(Region.of(region))
                 .endpointOverride(URI.create(endpoint))

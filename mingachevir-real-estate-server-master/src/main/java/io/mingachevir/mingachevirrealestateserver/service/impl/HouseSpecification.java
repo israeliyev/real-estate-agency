@@ -29,7 +29,6 @@ public class HouseSpecification implements Specification<House> {
     public Predicate toPredicate(Root<House> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
 
-        // Base filters for enabled and non-deleted houses
         predicates.add(cb.equal(root.get("enabled"), true));
         predicates.add(cb.equal(root.get("isDeleted"), false));
 
@@ -37,7 +36,6 @@ public class HouseSpecification implements Specification<House> {
         Join<House, InputParameterValue> inputParamsJoin = root.join("inputParameterValues", JoinType.LEFT);
         Join<InputParameterValue, Parameters> paramJoin = inputParamsJoin.join("parameter", JoinType.LEFT);
 
-        // Search key
         if (request.getSearchKey() != null && !request.getSearchKey().trim().isEmpty()) {
             String searchKeyLower = "%" + request.getSearchKey().toLowerCase() + "%";
             List<Predicate> searchPredicates = new ArrayList<>();
@@ -55,22 +53,18 @@ public class HouseSpecification implements Specification<House> {
             predicates.add(cb.or(searchPredicates.toArray(new Predicate[0])));
         }
 
-        // Filter by main category ID
         if (request.getMainCategoryId() != null) {
             predicates.add(cb.equal(root.get("mainCategory").get("id"), request.getMainCategoryId()));
         }
 
-        // Filter by sub category ID
         if (request.getSubCategoryId() != null) {
             predicates.add(cb.equal(root.get("subCategory").get("id"), request.getSubCategoryId()));
         }
 
-        // Filter by selective parameter IDs
         if (request.getSelectiveParameterIds() != null && !request.getSelectiveParameterIds().isEmpty()) {
             predicates.add(selectiveParamsJoin.get("id").in(request.getSelectiveParameterIds()));
         }
 
-        // Filter by input parameter ranges
         if (request.getInputParametersRanges() != null && !request.getInputParametersRanges().isEmpty()) {
             List<Predicate> rangePredicates = new ArrayList<>();
             for (InputParameterValueRequest range : request.getInputParametersRanges()) {
@@ -78,12 +72,11 @@ public class HouseSpecification implements Specification<House> {
                 Integer minValue = range.getMin();
                 Integer maxValue = range.getMax();
 
-                // Validate range inputs
                 if (parameterId == null || minValue == null || maxValue == null) {
                     continue; // Skip invalid ranges
                 }
                 if (minValue > maxValue) {
-                    // Return empty list instead of error for invalid range
+
                     return cb.disjunction(); // No results
                 }
 

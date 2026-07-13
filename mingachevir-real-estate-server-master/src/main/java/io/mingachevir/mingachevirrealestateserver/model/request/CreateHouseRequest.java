@@ -12,11 +12,10 @@ import java.util.List;
 @Setter
 @Data
 public class CreateHouseRequest {
-    // for update
+
     private Long id;
     List<MultipartFile> deletedMultipartFiles;
 
-    //for requester
     private String requester;
     private Integer number;
 

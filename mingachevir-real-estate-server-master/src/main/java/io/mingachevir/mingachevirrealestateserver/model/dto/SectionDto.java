@@ -23,7 +23,6 @@ public class SectionDto {
         this.createDate = section.getCreateDate();
         this.updateDate = section.getUpdateDate();
 
-        // Convert List of Houses to List of HouseDto
         this.houses = section.getHouses().stream()
                 .map(HouseCardDto::new)
                 .collect(Collectors.toList());

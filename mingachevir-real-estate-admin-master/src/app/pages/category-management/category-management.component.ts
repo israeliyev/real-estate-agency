@@ -28,8 +28,6 @@ export class CategoryManagementComponent implements OnInit {
 
   locationParameter: ParametersDTO;
   priceParameter: ParametersDTO;
-
-  // Store original data
   private originalMainCategories: MainCategoryDTO[] = [];
   private originalSubCategories: SubCategoryDTO[] = [];
   private originalParameters: ParametersDTO[] = [];
@@ -62,14 +60,10 @@ export class CategoryManagementComponent implements OnInit {
           this.priceParameter = response.data?.parameters?.find(fp => fp.code === 'PRICE');
           this.locationParameter = response.data?.parameters?.find(fp => fp.code === 'LOCATION');
           const filteredParameters = response.data?.parameters?.filter(fp => fp.code !== 'LOCATION' && fp.code !== 'PRICE');
-
-          // Deep copy for working arrays
           this.mainCategories = JSON.parse(JSON.stringify(response.data?.mainCategories || []));
           this.subCategories = JSON.parse(JSON.stringify(response.data?.subCategories || []));
           this.parameters = JSON.parse(JSON.stringify(filteredParameters || []));
           this.selectiveParameters = JSON.parse(JSON.stringify(response.data?.selectiveParameters || []));
-
-          // Deep copy for original arrays
           this.originalMainCategories = JSON.parse(JSON.stringify(response.data?.mainCategories || []));
           this.originalSubCategories = JSON.parse(JSON.stringify(response.data?.subCategories || []));
           this.originalParameters = JSON.parse(JSON.stringify(filteredParameters || []));
@@ -87,8 +81,6 @@ export class CategoryManagementComponent implements OnInit {
           this.subCategories = [];
           this.parameters = [];
           this.selectiveParameters = [];
-
-          // Store original data
           this.originalMainCategories = [];
           this.originalSubCategories = [];
           this.originalParameters = [];
@@ -131,8 +123,6 @@ export class CategoryManagementComponent implements OnInit {
   removeWarning(id: number) {
     this.warnings = this.warnings.filter(w => w.id !== id);
   }
-
-  // Add Methods
   addMainCategory() {
     if (!this.newMainCategory.name || this.newMainCategory.name.length > 70) {
       this.toaster.danger('Ad və ya kod 70 simvoldan çox ola bilməz və boş qala bilməz', 'Xəta');
@@ -228,8 +218,6 @@ export class CategoryManagementComponent implements OnInit {
       parameterId: this.parameters[0]?.id || this.parameters[0]?.tempId || 0,
     };
   }
-
-  // Delete Methods
   deleteItem(index: number, type: string) {
     if (type === 'mainCategory') {
       this.mainCategories.splice(index, 1);
@@ -255,8 +243,6 @@ export class CategoryManagementComponent implements OnInit {
     const selectParameterValuesNames = new Map<number | string, Set<string>>();
 
     let hasErrors = false;
-
-    // Check Main Categories
     for (const mc of this.mainCategories) {
       if (!mc.name || mc.name.length > 70) {
         this.addUniqueWarning('Əsas kateqoriyada ad və ya kod boş qala bilməz və 70 simvoldan çox ola bilməz');
@@ -271,8 +257,6 @@ export class CategoryManagementComponent implements OnInit {
       }
       mainCategoryNames.add(mc.name);
     }
-
-    // Check Sub Categories
     for (const sc of this.subCategories) {
       if (!sc.name || sc.name.length > 70) {
         this.addUniqueWarning('Alt kateqoriyada ad və ya kod boş qala bilməz və 70 simvoldan çox ola bilməz');
@@ -294,8 +278,6 @@ export class CategoryManagementComponent implements OnInit {
       }
       categoryNames.add(sc.name);
     }
-
-    // Check Parameters
     for (const p of this.parameters) {
       if (!p.name || p.name.length > 70) {
         this.addUniqueWarning('Parametrdə ad boş qala bilməz və 70 simvoldan çox ola bilməz');
@@ -317,8 +299,6 @@ export class CategoryManagementComponent implements OnInit {
       }
       paramNames.add(p.name);
     }
-
-    // Check Selective Parameters
     for (const sp of this.selectiveParameters) {
       if (!sp.name || sp.name.length > 70) {
         this.addUniqueWarning('Seçim parametr dəyərində ad və ya kod boş qala bilməz və 70 simvoldan çox ola bilməz');
@@ -359,7 +339,6 @@ export class CategoryManagementComponent implements OnInit {
         'Xəta',
       );
       this.warnings = this.warnings.filter(w => !w.message.includes('Aşağıdakı seçim parametrləri üçün dəyərlər təyin edilməyib'));
-      // Add new warning
       this.addWarning(`Aşağıdakı seçim parametrləri üçün dəyərlər təyin edilməyib: ${parameterNames}.
       Zəhmət olmasa, hər bir seçim parametri üçün ən azı bir dəyər əlavə edin.`, 'warning');
       this.topOfPage.nativeElement.scrollIntoView({ behavior: 'smooth' });
@@ -367,8 +346,6 @@ export class CategoryManagementComponent implements OnInit {
     }
     return true;
   }
-
-// Helper Method to Compare DTOs
   private hasChanged(original: any, current: any): boolean {
     return JSON.stringify(original) !== JSON.stringify(current);
   }
@@ -379,7 +356,6 @@ export class CategoryManagementComponent implements OnInit {
     let attempts = 0;
 
     do {
-      // Generate a random number between 100000 and 999999 (6 digits for simplicity)
       tempId = Math.floor(100000 + Math.random() * 900000);
       attempts++;
       if (attempts > maxAttempts) {
@@ -454,8 +430,6 @@ export class CategoryManagementComponent implements OnInit {
         .map(osp => osp.id as number),
     };
   }
-
-  // Submit Changes
   submitChanges() {
     if (!this.checkDublicateNames()) {
       this.topOfPage.nativeElement.scrollIntoView({ behavior: 'smooth' });

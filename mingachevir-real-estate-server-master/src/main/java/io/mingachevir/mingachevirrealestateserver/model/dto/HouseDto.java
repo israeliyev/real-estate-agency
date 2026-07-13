@@ -61,17 +61,14 @@ public class HouseDto {
         mainCategory = BaseActiveDto.builder().name(house.getMainCategory().getName()).id(house.getMainCategory().getId()).enabled(house.getMainCategory().getEnabled()).build();
         subCategory = BaseActiveDto.builder().name(house.getSubCategory().getName()).id(house.getSubCategory().getId()).enabled(house.getSubCategory().getEnabled()).build();
 
-        // Convert houseImages list to HouseImageDto list
         this.houseImages = house.getHouseImages().stream()
                 .map(HouseImageDto::new)  // Assuming HouseImageDto constructor exists
                 .collect(Collectors.toList());
 
-        // Convert houseSelectiveParameterValues set to SelectiveParameterValueDto set
         this.selectiveParameters = house.getSelectiveParameterValues().stream()
                 .map(SelectiveParameterValueDto::new)  // Assuming SelectiveParameterValueDto constructor exists
                 .collect(Collectors.toSet());
 
-        // Convert houseInputParameters list to InputParameterValueDto list
         this.inputParameters = house.getInputParameterValues().stream()
                 .map(InputParameterValueDto::new)  // Assuming InputParameterValueDto constructor exists
                 .collect(Collectors.toList());

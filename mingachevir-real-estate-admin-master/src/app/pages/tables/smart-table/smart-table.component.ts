@@ -42,7 +42,6 @@ export class SmartTableComponent implements OnInit {
   getTrackedSearchHouses(): void {
     this.analyticsService.getTrackedSearchHouses().subscribe({
       next: (response: TrackSearchHousesResponse) => {
-        // Configure table settings
         this.settings = {
           ...this.settings, // Preserve initial settings (including actions: false)
           columns: {
@@ -62,8 +61,6 @@ export class SmartTableComponent implements OnInit {
           },
           mode: 'external', // Optional: ensures no inline editing
         };
-
-        // Prepare table data
         const tableData = response.filters.map(fil => {
           const row: any = {
             count: fil?.count,

@@ -1,4 +1,3 @@
-// Consolidated Variables (removed duplicates)
 $primary-color: #3498db; // Used consistently, replaced #007bff
 $danger-color: #e74c3c;
 $background-color: #f8f9fa;
@@ -17,8 +16,6 @@ $button-hover-effect: brightness(90%);
 $light-bg: #f8f9fa;
 $hover-bg: #e9ecef;
 $link-hover-bg: lighten($primary-color, 40%);
-
-// Global Styles
 body {
   font-family: 'Arial', sans-serif; // Ensured quotes are correct
   background-color: $background-color;
@@ -42,8 +39,6 @@ h3 {
   padding: 0.6rem 0 !important;
   font-size: 1.4rem;
 }
-
-// Table Styles
 .table {
   background-color: #ffffff;
   border-radius: 8px;
@@ -67,8 +62,6 @@ h3 {
     transition: background-color 0.3s ease;
   }
 }
-
-// Button Styles
 .btn {
   width: 100%;
   border-radius: $border-radius;
@@ -97,8 +90,6 @@ h3 {
     }
   }
 }
-
-// Alert Styles
 .alert {
   border-radius: $border-radius;
   margin-bottom: 20px;
@@ -109,8 +100,6 @@ h3 {
     color: $alert-warning-text;
   }
 }
-
-// Form Control Styles
 .form-control {
   border-radius: $border-radius;
   border: 1px solid #ced4da;
@@ -126,8 +115,6 @@ h3 {
   --bs-table-color-type: rgba(187, 206, 248, 0.4);
   --bs-table-bg-type: rgba(187, 217, 248, 0.3);
 }
-
-// Derelict Houses Container
 .derelict-houses-container {
   margin-top: 2rem;
   padding: 1.5rem;
@@ -145,8 +132,6 @@ h3 {
     font-family: 'Inter', sans-serif; // Ensured quotes are correct
   }
 }
-
-// Derelict Houses Table
 .derelict-houses-table {
   width: 100%;
   border-collapse: collapse;
@@ -205,8 +190,6 @@ h3 {
     }
   }
 }
-
-// Responsive Design
 @media (max-width: 768px) {
   .table,
   .derelict-houses-table {

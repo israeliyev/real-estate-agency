@@ -16,7 +16,7 @@ import java.util.Date;
 @Entity
 
 public class HouseView extends BaseAuditEntity {
-    // Getters and Setters
+
     @ManyToOne
     @JoinColumn(name = "house_id", referencedColumnName = "id")
     private House house;

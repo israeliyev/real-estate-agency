@@ -20,8 +20,6 @@ export class SectionComponent implements OnInit {
   maxSectionNameLength = 200;
   maxHousesPerSection = 5;
   selectedSection: SectionDto | null = null;
-
-  // Pagination properties
   pageNumber = 1;
   pageSize = 20;
   totalElements = 0;

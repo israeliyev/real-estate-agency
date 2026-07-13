@@ -21,12 +21,10 @@ export class FileService {
 
   processAndUploadFile(file: File): Observable<string> {
     const validTypes = [
-      // Image types
       'image/png',
       'image/jpeg',
       'image/jpg',
       'image/heic',
-      // Video types
       'video/mp4',
       'video/mpeg',
       'video/quicktime', // .mov files
@@ -34,31 +32,23 @@ export class FileService {
       'video/ogg',
     ];
     const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
-
-    // Check if file type is valid
     if (!validTypes.includes(file.type)) {
       return throwError(new Error('Fayl növü qəbul edilmir'));
     }
-
-    // Determine max size based on file type
     let maxSizeMB: number;
     if (file.type.startsWith('image/')) {
       maxSizeMB = this.maxImageSizeMB;
     } else if (file.type.startsWith('video/')) {
       maxSizeMB = this.maxVideoSizeMB;
     } else {
-      // Fallback in case a new type is added but not handled
       return throwError(new Error('Fayl növü qəbul edilmir'));
     }
-
-    // Check file size
     if (fileSizeMB > maxSizeMB) {
       return throwError(
         new Error(`Faylın ölçüsü ${maxSizeMB} MB'dan böyük olmamalıdır`)
       );
 
     }
-    // Compress image if larger than 1 MB
     if (fileSizeMB > 1 && file.type.startsWith('image/')) {
       return this.compressImage(file).pipe(
         switchMap(compressedFile => this.uploadFile(compressedFile)),

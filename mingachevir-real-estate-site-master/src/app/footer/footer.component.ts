@@ -55,7 +55,6 @@ export class FooterComponent implements OnInit {
     this.categoryService.getParametersValuesForFooter().subscribe({
       next: (result) => {
         if (result.responseStatus === HttpStatusCode.OK) {
-          // Fix 2: guard undefined with ?? []
           this.parameters = (result.data ?? []).slice(0, 5).map(parameter => ({
             ...parameter,
             selectiveParameterValues: (parameter?.selectiveParameterValues ?? []).slice(0, 5)

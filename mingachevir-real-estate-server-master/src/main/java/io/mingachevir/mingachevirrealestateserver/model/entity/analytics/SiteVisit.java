@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 
 public class SiteVisit extends BaseAuditEntity {
-    // Getters and Setters
+
     private Date visitDateTime;
     private String visitorIp; // Optional: Track IP for unique visitors
     private String sessionId; // Optional: Track session for unique visits

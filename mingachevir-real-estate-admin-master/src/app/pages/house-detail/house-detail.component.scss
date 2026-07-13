@@ -1,4 +1,3 @@
-// Variables
 $carousel-width: 100%;
 $carousel-max-width: 800px;
 $slide-transition: transform 0.5s ease-in-out;
@@ -14,8 +13,6 @@ $thumbnail-margin: 5px;
 $thumbnail-border: 2px solid transparent;
 $thumbnail-active-border: 2px solid #ffffff;
 
-// Carousel Container
-
 label{
   margin: 0 !important;
   padding: 5px !important;
@@ -28,13 +25,9 @@ label{
   max-width: $carousel-max-width;
   margin: auto;
   overflow: hidden;
-
-  // Slides Container
   .slides {
     display: flex;
     transition: $slide-transition;
-
-    // Individual Slide
     .slide {
       i {
         position: absolute;
@@ -49,13 +42,9 @@ label{
       min-width: 100%;
       box-sizing: border-box;
       display: none;
-
-      // Active Slide
       &.active {
         display: block;
       }
-
-      // Slide Image
       img {
         width: 100%;
         height: 400px;
@@ -74,8 +63,6 @@ label{
     }
 
   }
-
-  // Navigation Buttons
   .prev, .next {
     cursor: pointer;
     position: absolute;
@@ -87,32 +74,22 @@ label{
     border: none;
     font-size: $button-font-size;
     transition: background-color 0.3s ease;
-
-    // Button Hover Effect
     &:hover {
       background-color: $button-hover-bg-color;
     }
   }
-
-  // Previous Button
   .prev {
     left: 0;
     border-radius: 0 $button-border-radius $button-border-radius 0;
   }
-
-  // Next Button
   .next {
     right: 0;
     border-radius: $button-border-radius 0 0 $button-border-radius;
   }
-
-  // Thumbnails Container
   .thumbnails {
     display: flex;
     justify-content: center;
     margin-top: 10px;
-
-    // Individual Thumbnail
     .thumbnail {
       width: $thumbnail-width-size;
       height: $thumbnail-size;
@@ -121,13 +98,9 @@ label{
       border: $thumbnail-border;
       transition: border 0.3s ease;
       border-radius: 5px;
-
-      // Active Thumbnail
       &.active {
         border: $thumbnail-active-border;
       }
-
-      // Thumbnail Image
       img {
         width: 100%;
         height: 100%;
@@ -158,9 +131,9 @@ ul{
 
 
 .flexible-textarea {
-  min-height: 300px; /* min height */
-  max-height: 300px; /* Maximum height */
-  resize: none; /* Allows only vertical resizing */
+  min-height: 300px;
+  max-height: 300px;
+  resize: none;
 }
 
 .notes-text{

@@ -23,47 +23,32 @@ import {forkJoin} from 'rxjs';
   styleUrls: ['./house-detail.component.scss'],
 })
 export class HouseDetailComponent {
-  // Constants and Enums
   protected readonly PriceTypeEnum = PriceType;
   private readonly maxPhotos = 10;
   private readonly maxVideo = 1;
   private readonly maxPhotoFileSize = 5 * 1024 * 1024; // 5MB limit
   private readonly maxVideoFileSize = 100 * 1024 * 1024; // 100MB limit
   private warningIdCounter = 0;
-
-  // House Data
   originalHouse: HouseDto;
   house: HouseDto;
   houseId?: number;
-
-  // Categories and Parameters
   mainCategories: MainCategoryDto[] = [];
   subCategoriesForHouseRequest: SubCategoryDto[] = [];
   standardSubCategories: SubCategoryDto[] = [];
   parameters: ParameterDto[] = [];
   standardParameters: ParameterDto[] = [];
-
-  // Selected Values
   selectedMainCategoryForRequest: MainCategoryDto;
   selectedSubCategoryForRequest: SubCategoryDto;
   selectedLocationId: number;
-
-  // Special Parameters
   priceParameter: ParameterDto;
   locationParameter: ParameterDto;
-
-  // House Properties
   price: number;
   priceType: PriceType = PriceType.MONTH;
   location: string;
   mainCategoryId: number;
   subCategoryId: number;
-
-  // Parameter Values
   selectiveParameterValues: Map<number, CreateInputParameterValueRequest> = new Map();
   inputParameterValues: Map<number, CreateInputParameterValueRequest> = new Map();
-
-  // UI State
   currentSlide = 0;
   isEditMode = false;
   isCreateMode = false;
@@ -100,8 +85,6 @@ export class HouseDetailComponent {
       });
     }
   }
-
-  // ==================== INITIALIZATION METHODS ====================
   private checkUrlParameter(): void {
     this.houseId = Number(this.route.snapshot.paramMap.get('houseId'));
     if (this.houseId) {
@@ -165,21 +148,15 @@ export class HouseDetailComponent {
       next: (response) => {
         if (response.responseStatus === HttpStatusCode.OK) {
           this.standardSubCategories = response.data ?? [];
-
-          // Update subCategoriesForHouseRequest to include standard subcategories
           this.subCategoriesForHouseRequest = [
             ...this.standardSubCategories,
             ...(this.selectedMainCategoryForRequest?.subCategories || []),
           ];
-
-          // If in edit mode and house has a subcategory, select it
           if (this.house?.subCategory?.id && !this.isCreateMode) {
             this.selectedSubCategoryForRequest = this.subCategoriesForHouseRequest.find(
               sub => sub.id === this.house.subCategory.id,
             );
             this.subCategoryId = this.selectedSubCategoryForRequest?.id;
-
-            // Fetch parameters for the subcategory if it exists
             if (this.subCategoryId) {
               this.getParametersBySubCategoryId(this.subCategoryId);
             }
@@ -198,8 +175,6 @@ export class HouseDetailComponent {
       },
     });
   }
-
-  // ==================== CATEGORY & PARAMETER METHODS ====================
   getCategories() {
     this.categoryService.getCategories().subscribe({
       next: (result) => {
@@ -282,8 +257,6 @@ export class HouseDetailComponent {
     this.locationParameter = null;
     this.toaster.danger(`Parametirlər alınmadı`, 'Xəta');
   }
-
-  // ==================== SELECTION HANDLERS ====================
   selectMainCategoryForRequest(mainCategoryId: number): void {
     const previousMainCategoryId = this.mainCategoryId;
     this.mainCategoryId = mainCategoryId;
@@ -385,8 +358,6 @@ export class HouseDetailComponent {
 
     return selectedParam.value;
   }
-
-  // ==================== FORM DATA MANAGEMENT ====================
   private assignHouseDataToForm(): void {
     this.house = {...this.originalHouse};
     this.mainCategories = [{id: this.house.mainCategory.id, name: this.house.mainCategory.name, subCategories: []}];
@@ -398,8 +369,6 @@ export class HouseDetailComponent {
     this.parameters = [];
     this.selectiveParameterValues.clear();
     this.inputParameterValues.clear();
-
-    // Process Selective Parameters, excluding LOCATION and PRICE
     this.house.selectiveParameters.forEach(sp => {
       if (sp.parameter.code !== 'LOCATION' && sp.parameter.code !== 'PRICE') {
         const paramDto: ParameterDto = {
@@ -418,8 +387,6 @@ export class HouseDetailComponent {
         this.selectiveParameterValues.set(sp.parameter.id, {parameterId: sp.parameter.id, value: sp.id});
       }
     });
-
-    // Process Input Parameters, excluding LOCATION and PRICE (though typically input params won’t have these codes)
     this.house.inputParameters.forEach(ip => {
       if (ip.parameter.code !== 'LOCATION' && ip.parameter.code !== 'PRICE') {
         const paramDto: ParameterDto = {
@@ -438,8 +405,6 @@ export class HouseDetailComponent {
         this.inputParameterValues.set(ip.parameter.id, {parameterId: ip.parameter.id, value: ip.value});
       }
     });
-
-    // Price and Location Assignment (handled separately)
     this.price = this.house.price;
     this.priceType = this.house.priceType;
     const locationParam = this.house.selectiveParameters.find(sp => sp.parameter?.code === 'LOCATION');
@@ -503,8 +468,6 @@ export class HouseDetailComponent {
   }
 
   private dataLoaded = false;
-
-  // ==================== EDIT MODE MANAGEMENT ====================
   toggleEditMode(): void {
     const hasDisabled = this.hasDisabled();
     this.isEditMode = !this.isEditMode;
@@ -552,8 +515,6 @@ export class HouseDetailComponent {
       });
     }
   }
-
-  // ==================== MEDIA MANAGEMENT ====================
   uploadMedia(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
@@ -641,8 +602,6 @@ export class HouseDetailComponent {
     this.house.coverImage = this.house.houseImages[index].path;
     this.toaster.success('Qapaq şəkli uğurla təyin edildi', 'Uğur');
   }
-
-  // ==================== SLIDER MANAGEMENT ====================
   nextSlide(): void {
     const totalSlides = (this.house.houseImages?.length || 0) + (this.house.houseVideo ? 1 : 0);
     this.currentSlide = (this.currentSlide + 1) % totalSlides;
@@ -656,8 +615,6 @@ export class HouseDetailComponent {
   goToSlide(index: number): void {
     this.currentSlide = index;
   }
-
-  // ==================== VALIDATION & SUBMISSION ====================
   private validateHouse(): boolean {
     if (!this.house.price || !this.house.location || !this.house.mainCategory?.id || !this.house.priceType) {
       this.toaster.danger('Qiymət, yer və əsas kateqoriya mütləq daxil edilməlidir', 'Xəta');
@@ -827,8 +784,6 @@ export class HouseDetailComponent {
       });
     }
   }
-
-  // ==================== UTILITY METHODS ====================
   get formattedDescription(): string {
     if (!this.house?.description) {
       return 'Açıqlama yoxdur';
@@ -896,16 +851,12 @@ export class HouseDetailComponent {
     if (!this.isEditMode && !this.isCreateMode) {
       return false; // No changes if neither mode is active
     }
-
-    // Prepare the current house state as a HouseDto
     this.prepareHouseRequest(false); // This updates this.house with the current state
     const currentHouse = {...this.house}; // Clone the prepared house
 
     if (this.isEditMode && this.originalHouse) {
-      // Edit Mode: Compare current house with originalHouse
       return !this.areHousesEqual(this.originalHouse, currentHouse);
     } else if (this.isCreateMode) {
-      // Create Mode: Compare current house with an empty house
       const emptyHouse = this.getEmptyHouse();
       return !this.areHousesEqual(emptyHouse, currentHouse);
     }
@@ -915,7 +866,6 @@ export class HouseDetailComponent {
 
   cancelChanges(): void {
     if (this.isEditMode && this.house?.id) {
-      // Edit Mode: Revert to original house data
       this.assignHouseDataToForm();
 
       const originalImagePaths = new Set(this.originalHouse.houseImages.map(img => img.path));
@@ -930,7 +880,6 @@ export class HouseDetailComponent {
       this.toaster.info('Dəyişikliklər ləğv edildi', 'Məlumat');
     } else if (this.isCreateMode) {
       this.loaded = false; // Ensure UI renders after reset
-      // Create Mode: Reset to empty house and clean up media
       this.cleanupUnsavedMedia(); // Clean up any uploaded images/videos
       this.house = this.getEmptyHouse(); // Reset to initial empty state
       this.mainCategories = [];

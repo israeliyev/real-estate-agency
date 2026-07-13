@@ -1,4 +1,3 @@
-// house-request.component.scss
 .houses-container {
   height: 85vh;
   overflow-y: auto;
@@ -114,8 +113,6 @@
     min-height: 200px;
   }
 }
-
-// Responsive adjustments
 @media (max-width: 768px) {
   .house-content {
     grid-template-areas:

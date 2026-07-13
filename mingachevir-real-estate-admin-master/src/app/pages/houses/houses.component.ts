@@ -36,8 +36,6 @@ export class HousesComponent implements OnInit {
   pageSize = 20;  // Records per page
   totalElements = 0; // Total number of houses
   totalPages = 0; // Total number of pages
-
-  // Use Maps for better parameter management
   selectiveParameterValues = new Map<number, { valueId: number; valueName: string }>();
   inputParameterRanges = new Map<number, { min: number; max: number }>();
 
@@ -221,32 +219,20 @@ export class HousesComponent implements OnInit {
     const maxVisiblePages = window.innerWidth > 768 ? 5 : 3;
     const totalPages = this.totalPages;
     const currentPage = this.pageNumber;
-
-    // Handle edge cases
     if (totalPages <= 1) {
       return totalPages === 1 ? [1] : [];
     }
-
-    // If total pages are few and on desktop, show all pages
     if (totalPages <= maxVisiblePages) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
     const pages: (number | string)[] = [];
-
-    // Always include the first page
     pages.push(1);
-
-    // Calculate the range of pages to show around the current page
     let start: number;
     let end: number;
-
-    // Determine the range to avoid duplicates and invalid pages
     const halfVisible = Math.floor(maxVisiblePages / 2);
     start = Math.max(2, currentPage - halfVisible);
     end = Math.min(totalPages - 1, currentPage + halfVisible);
-
-    // Adjust start and end to ensure we show maxVisiblePages (excluding first/last)
     if (end - start + 1 < maxVisiblePages - 2) {
       if (currentPage <= halfVisible + 1) {
         end = Math.min(totalPages - 1, maxVisiblePages - 1);
@@ -254,23 +240,15 @@ export class HousesComponent implements OnInit {
         start = Math.max(2, totalPages - maxVisiblePages + 2);
       }
     }
-
-    // Add ellipsis before if needed
     if (start > 2) {
       pages.push('...');
     }
-
-    // Add the range of pages
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
-
-    // Add ellipsis after if needed
     if (end < totalPages - 1) {
       pages.push('...');
     }
-
-    // Always include the last page
     if (totalPages > 1) {
       pages.push(totalPages);
     }

@@ -105,11 +105,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    /**
-     * Extracts the object key from a stored URL.
-     * Supports both the new R2 public URL prefix and (optionally) the legacy S3 prefix
-     * so that previously uploaded files can still be deleted after migration.
-     */
+    
     private String extractKey(String filePath) {
         String r2Prefix = publicUrl.endsWith("/") ? publicUrl : publicUrl + "/";
         if (filePath.startsWith(r2Prefix)) {

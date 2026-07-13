@@ -27,7 +27,7 @@ import java.util.Set;
 @Entity
 
 public class SearchQuery extends BaseAuditEntity {
-    // Getters and Setters
+
     private String searchKey; // The searched keyword
 
     @ManyToOne

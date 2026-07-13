@@ -55,21 +55,21 @@ public class HouseRequestDto {
         }
 
         if(!houseRequest.getHouseImages().isEmpty()) {
-            // Convert houseImages list to HouseImageDto list
+
             this.houseImages = houseRequest.getHouseImages().stream()
                     .map(HouseImageDto::new)  // Assuming HouseImageDto constructor exists
                     .collect(Collectors.toList());
         }
 
         if(!houseRequest.getSelectiveParameterValues().isEmpty()) {
-            // Convert houseSelectiveParameterValues set to SelectiveParameterValueDto set
+
             this.selectiveParameters = houseRequest.getSelectiveParameterValues().stream()
                     .map(SelectiveParameterValueDto::new)  // Assuming SelectiveParameterValueDto constructor exists
                     .collect(Collectors.toSet());
         }
 
         if(!houseRequest.getInputParameterValues().isEmpty()) {
-            // Convert houseInputParameters list to InputParameterValueDto list
+
             this.inputParameters = houseRequest.getInputParameterValues().stream()
                     .map(InputParameterValueDto::new)  // Assuming InputParameterValueDto constructor exists
                     .collect(Collectors.toList());
