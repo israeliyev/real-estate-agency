@@ -119,6 +119,20 @@ As the sole developer on this project, I was responsible for the full software d
 - Ongoing maintenance and feature development
 
 ---
+## 👤 Media
+
+<img width="1440" height="900" alt="1" src="https://github.com/user-attachments/assets/f7eb46a4-de80-4fc6-9af3-2de952098ff9" />
+<img width="1440" height="900" alt="2" src="https://github.com/user-attachments/assets/42eaff4a-8a18-4fb5-9dd0-ff224326dd72" />
+<img width="1440" height="900" alt="3" src="https://github.com/user-attachments/assets/8f69ddf7-9ea1-4de8-9847-87aa5cf74575" />
+<img width="1440" height="900" alt="4" src="https://github.com/user-attachments/assets/2d508daa-9150-4d7c-9578-38cd13eae94b" />
+<img width="1440" height="900" alt="5" src="https://github.com/user-attachments/assets/9d66e825-808a-4c54-a6d0-5614e7f6fd28" />
+<img width="1440" height="900" alt="6" src="https://github.com/user-attachments/assets/d709cf26-200c-40d4-be88-8ebdca5f197a" />
+<img width="1440" height="900" alt="7" src="https://github.com/user-attachments/assets/8fc65d7f-440f-484c-a82c-9d91b39dce40" />
+<img width="1440" height="900" alt="8" src="https://github.com/user-attachments/assets/ec7d17a9-e174-4f2f-810e-1b3fc222ea90" />
+<img width="1440" height="900" alt="9" src="https://github.com/user-attachments/assets/5ad23775-8541-48e4-aa98-e5dfed0fef4c" />
+<img width="1440" height="900" alt="10" src="https://github.com/user-attachments/assets/e6c30360-0f02-4a6f-887c-924f6ec46585" />
+<img width="1440" height="900" alt="11" src="https://github.com/user-attachments/assets/5654d377-9d89-4bee-aeca-5f1310566e67" />
+---
 
 ## 📄 License
 
